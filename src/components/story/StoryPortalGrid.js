@@ -17,7 +17,7 @@ export function StoryPortalGrid({ stories }) {
         <article
           key={story.id}
           className={cx(
-            "tale-frame flex min-h-[430px] flex-col justify-between overflow-hidden rounded-lg bg-gradient-to-b p-5",
+            "tale-frame flex min-h-[430px] flex-col justify-between overflow-hidden rounded-lg bg-linear-to-b p-5",
             accentClassNames[story.accent],
           )}
         >
