@@ -91,6 +91,7 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
     storyState ? phaseLabels[storyState.phase] ?? storyState.phase : "讀取中",
   );
   const stageNumbers = storyStages.map((_, index) => `${index + 1}`);
+  const stageTotalNumber = `${stageCount}`;
   const stageGutter = "clamp(1rem, 3vw, 3rem)";
   const stageOffset = "clamp(5.5rem, 28vw, 25rem)";
   const stageHoverShift = isReturnHovered
@@ -243,7 +244,7 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
           ${isStoryAreaActive ? "pointer-events-none translate-x-28 opacity-0" : "translate-x-0 opacity-100"}`}
       >
         <div className="relative z-10 mt-12 h-fit w-fit select-none text-left">
-          <span className="inline-block tracking-[0.5em] transition-all duration-[850ms] ease-in-out group-hover/switch:tracking-[2em]">
+          <span className="inline-block tracking-[0.5em] transition-all duration-850 ease-in-out group-hover/switch:tracking-[2em]">
             開始故事 &gt;
           </span>
         </div>
@@ -281,26 +282,26 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
         tabIndex={0}
       >
         <div className="relative z-10 mt-12 h-fit w-fit select-none text-right">
-          <span className="inline-block text-xs tracking-[0.32em] transition-all duration-[850ms] ease-in-out group-hover/return:tracking-[0.8em] sm:text-sm sm:tracking-[0.5em] sm:group-hover/return:tracking-[1.4em] xl:group-hover/return:tracking-[2em]">
+          <span className="inline-block text-xs tracking-[0.32em] transition-all duration-850e-in-out group-hover/return:tracking-[0.8em] sm:text-sm sm:tracking-[0.5em] sm:group-hover/return:tracking-[1.4em] xl:group-hover/return:tracking-[2em]">
             &lt;返回入口
           </span>
         </div>
       </div>
 
       <div
-        className={`absolute inset-0 z-20 h-full w-full overflow-hidden transition-opacity duration-500 ease-in-out
+        className={`absolute inset-0 z-20 grid h-full w-full items-center overflow-hidden transition-opacity duration-500 ease-in-out
           ${isStoryAreaActive ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
       >
         <div
-          className="relative h-full"
+          className="relative grid h-[min(84vh,58rem)] min-h-0 min-w-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-[clamp(4rem,3vh,2rem)]"
           style={{ marginLeft: "var(--stage-offset)" }}
         >
           {stageCount > 0 && (
             <div
-              className="pointer-events-none absolute top-[clamp(6.5rem,24vh,14rem)] z-30 grid"
+              className="pointer-events-none z-30 grid"
               style={{
-                left: "var(--stage-gutter)",
-                width: "var(--stage-width)",
+                paddingLeft: "var(--stage-gutter)",
+                paddingRight: "var(--stage-gutter)",
               }}
             >
               <div
@@ -328,84 +329,104 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
             </div>
           )}
 
-          {storyStages.map((stageEntry, index) => (
-            <section
-              aria-hidden={index !== activeStageIndex}
-              className="absolute top-[clamp(7.5rem,20vh,13rem)] grid items-center transition-all duration-900 ease-in-out"
-              key={stageEntry.key}
-              style={{
-                ...getDepthStageStyle(index - activeStageIndex),
-                left: "var(--stage-gutter)",
-                width: "var(--stage-width)",
-              }}
-            >
-              <StoryCheckpointPanel
-                draftInput={draftInput}
-                isCurrent={stageEntry.checkpointIndex === storyCheckpoints.length - 1}
-                isTurnLoading={isTurnLoading}
-                onDraftInputChange={setDraftInput}
-                onSubmit={handleStorySubmit}
-                stageIndex={stageEntry.checkpointIndex}
-                storyError={stageEntry.checkpointIndex === storyCheckpoints.length - 1 ? storyError : ""}
-                storyState={stageEntry.storyState}
-                submittedInput={stageEntry.submittedInput}
-              />
-            </section>
-          ))}
-        </div>
-
-        {stageCount > 0 && (
           <div
-            className="pointer-events-none absolute bottom-[clamp(1.25rem,3vh,1.75rem)] z-20"
+            className="relative min-h-0 overflow-visible"
             style={{
-              left: "calc(var(--stage-offset) + var(--stage-gutter))",
-              right: "var(--stage-gutter)",
+              paddingLeft: "var(--stage-gutter)",
+              paddingRight: "var(--stage-gutter)",
             }}
           >
-            <div
-              className="mx-auto grid w-full max-w-6xl gap-3"
-              style={getHoverShiftStyle(1180)}
-            >
-              <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-[#f6d797]/82">
-                <span className="inline-flex items-center">
-                  <span>階段&nbsp;</span>
-                  <StageHeaderText
-                    activeStageIndex={activeStageIndex}
-                    items={stageNumbers}
-                  />
-                </span>
-                <span>
-                  {activeStageIndex + 1} / {stageCount}
-                </span>
-              </div>
-              <div className="h-px w-full bg-[#f7d995]/20">
-                <div
-                  className="h-px bg-[#f7d995] transition-[width] duration-700 ease-in-out"
-                  style={{ width: `${progressPercent}%` }}
+            {storyStages.map((stageEntry, index) => (
+              <section
+                aria-hidden={index !== activeStageIndex}
+                className="absolute inset-0 grid items-center transition-all duration-900 ease-in-out"
+                key={stageEntry.key}
+                style={getDepthStageStyle(index - activeStageIndex)}
+              >
+                <StoryCheckpointPanel
+                  draftInput={draftInput}
+                  isCurrent={stageEntry.checkpointIndex === storyCheckpoints.length - 1}
+                  isTurnLoading={isTurnLoading}
+                  onDraftInputChange={setDraftInput}
+                  onSubmit={handleStorySubmit}
+                  stageIndex={stageEntry.checkpointIndex}
+                  storyError={stageEntry.checkpointIndex === storyCheckpoints.length - 1 ? storyError : ""}
+                  storyState={stageEntry.storyState}
+                  submittedInput={stageEntry.submittedInput}
                 />
-              </div>
-              <div className="relative h-2">
-                {storyStages.map((stageEntry, index) => {
-                  const nodeLeft = stageCount > 1
-                    ? (index / (stageCount - 1)) * 100
-                    : 0;
+              </section>
+            ))}
+          </div>
 
-                  return (
-                  <span
-                    className={`story-progress-node absolute top-0 h-2 w-2 -translate-x-1/2 rounded-full border border-[#f7d995]/50 transition-[left,background-color,border-color,transform] duration-700 ease-in-out
-                      ${index <= activeStageIndex ? "bg-[#f7d995]" : "bg-[#080b14]/70"}`}
-                    key={`progress-${stageEntry.key}`}
-                    style={{
-                      left: `${nodeLeft}%`,
-                      transitionDelay: `${index * 70}ms`,
-                    }}
+          {stageCount > 0 && (
+            <div
+              className="pointer-events-none z-20"
+              style={{
+                paddingLeft: "var(--stage-gutter)",
+                paddingRight: "var(--stage-gutter)",
+              }}
+            >
+              <div
+                className="mx-auto grid w-full max-w-6xl gap-3"
+                style={getHoverShiftStyle(1180)}
+              >
+                <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-[#f6d797]/82">
+                  <span className="inline-flex items-center">
+                    <span>階段&nbsp;</span>
+                    <StageHeaderText
+                      activeStageIndex={activeStageIndex}
+                      items={stageNumbers}
+                    />
+                  </span>
+                  <span className="inline-flex items-center">
+                    <StageHeaderText
+                      activeStageIndex={activeStageIndex}
+                      items={stageNumbers}
+                    />
+                    <span>&nbsp;/&nbsp;</span>
+                    <span
+                      aria-label={stageTotalNumber}
+                      className="relative inline-grid min-w-[1ch]"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="story-inline-value col-start-1 row-start-1"
+                        key={stageTotalNumber}
+                      >
+                        {stageTotalNumber}
+                      </span>
+                    </span>
+                  </span>
+                </div>
+                <div className="h-px w-full bg-[#f7d995]/20">
+                  <div
+                    className="h-px bg-[#f7d995] transition-[width] duration-700 ease-in-out"
+                    style={{ width: `${progressPercent}%` }}
                   />
-                  );
-                })}
+                </div>
+                <div className="relative h-2">
+                  {storyStages.map((stageEntry, index) => {
+                    const nodeLeft = stageCount > 1
+                      ? (index / (stageCount - 1)) * 100
+                      : 0;
+
+                    return (
+                      <span
+                        className={`story-progress-node absolute top-0 h-2 w-2 -translate-x-1/2 ml-1 rounded-full border border-[#f7d995]/50 transition-[left,background-color,border-color,transform] duration-700 ease-in-out
+                          ${index <= activeStageIndex ? "bg-[#f7d995]" : "bg-tale-ink/70"}`}
+                        key={`progress-${stageEntry.key}`}
+                        style={{
+                          left: `${nodeLeft}%`,
+                          transitionDelay: `${index * 70}ms`,
+                        }}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </section>
   );
@@ -647,10 +668,8 @@ function StoryCheckpointPanel({
   const userReply = storyState ? submittedInput?.trim() ?? "" : "";
 
   return (
-    <div className="story-status-surface mx-auto grid h-[clamp(34rem,64vh,44rem)] w-full min-w-0 max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-stretch">
-      <div className="grid h-full min-w-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-5">
-        <div className="h-[clamp(4rem,10vh,6.5rem)]" />
-
+    <div className="story-status-surface mx-auto grid h-full min-h-0 w-full min-w-0 max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-stretch">
+      <div className="grid h-full min-h-0 min-w-0 grid-rows-[minmax(0,1fr)_auto] gap-5">
         <div className="grid min-w-0 max-w-3xl content-start gap-5 overflow-x-hidden overflow-y-auto pr-2">
           <h2
             className="text-5xl font-semibold leading-tight text-[#ffe9b7] drop-shadow-[0_4px_22px_rgba(0,0,0,0.74)] sm:text-6xl lg:text-7xl"
@@ -658,20 +677,6 @@ function StoryCheckpointPanel({
           >
             {sceneTitle}
           </h2>
-
-          {userReply && (
-            <div
-              className="grid max-w-2xl gap-2 border-l border-[#f7d995]/22 bg-[#080b14]/28 py-2 pl-4"
-              style={getHoverShiftStyle(720)}
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">
-                你的回覆
-              </p>
-              <p className="text-sm leading-7 text-[#f8e8c4]/74">
-                {userReply}
-              </p>
-            </div>
-          )}
 
           <TypewriterText
             key={sceneNarration}
@@ -692,15 +697,29 @@ function StoryCheckpointPanel({
           )}
         </div>
 
-        <div className="grid min-h-[11.75rem] max-w-2xl content-end gap-3">
-          {showStoryInput && (
+        <div className="grid min-h-47 max-w-2xl content-end gap-3">
+          {userReply && (
+            <div
+              className="grid max-w-2xl gap-2 border-l border-[#f7d995]/22 bg-tale-ink/28 py-2 pl-4"
+              style={getHoverShiftStyle(960)}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">
+                你的回覆
+              </p>
+              <p className="text-sm leading-7 text-[#f8e8c4]/74">
+                {userReply}
+              </p>
+            </div>
+          )}
+
+          {showStoryInput && !userReply && (
             <form
               className="grid max-w-2xl gap-3"
               onSubmit={onSubmit}
               style={getHoverShiftStyle(960)}
             >
               <textarea
-                className="min-h-28 resize-none rounded-md border border-[#f7d995]/28 bg-[#080b14]/62 px-4 py-3 text-base leading-7 text-[#fff3d0] outline-none transition duration-300 placeholder:text-[#f8e8c4]/34 focus:border-[#f7d995]/72 focus:bg-[#080b14]/82"
+                className="min-h-28 resize-none rounded-md border border-[#f7d995]/28 bg-tale-ink/62 px-4 py-3 text-base leading-7 text-[#fff3d0] outline-none transition duration-300 placeholder:text-[#f8e8c4]/34 focus:border-[#f7d995]/72 focus:bg-tale-ink/82"
                 disabled={isTurnLoading}
                 onChange={(event) => onDraftInputChange(event.target.value)}
                 placeholder="讓她做什麼、想什麼，或說出一句沒說出口的話..."
