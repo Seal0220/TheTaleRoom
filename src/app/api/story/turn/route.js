@@ -14,7 +14,8 @@ export async function POST(request) {
     return NextResponse.json({ error: validation.error }, { status: 400 });
   }
 
-  const { mode, previousState, sessionId, storyId, userInput } = validation.value;
+  const { interactionHistory, mode, previousState, sessionId, storyId, userInput } =
+    validation.value;
   const baseStory = await readBaseStoryDocument(storyId);
 
   if (!baseStory.ok) {
@@ -23,6 +24,7 @@ export async function POST(request) {
 
   const result = await generateInteractiveStoryTurn({
     baseStoryDocument: baseStory.document.text,
+    interactionHistory,
     mode,
     previousState,
     sessionId,
@@ -46,6 +48,7 @@ export async function POST(request) {
     input: {
       mode,
       previousTurnIndex: previousState?.turn_index ?? null,
+      interactionHistory,
       storyId,
       userInput,
     },

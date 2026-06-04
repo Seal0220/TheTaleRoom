@@ -41,6 +41,17 @@ Use this placement map:
 
 Use PascalCase for component files and camelCase for non-component JavaScript files. Name route-local helpers `help<Route><Thing>.js` and exported helper functions with `help...`. Name handlers `handle<Route><Action>.js` or `handle<Container><Action>.js` and exported handler functions with `handle...`.
 
+Naming and separation rules for this project:
+
+- Component files must use PascalCase, for example `StoryRoom.js`, `StoryStageOverlay.js`, and `StoryIntroPanel.js`.
+- Component function names and exported component identifiers must also use PascalCase.
+- URL route folders may use kebab-case. Kebab-case is reserved for route slugs only.
+- Non-route folders must use camelCase, including feature folders such as `storyRoom`.
+- Non-component JavaScript files must use camelCase, including helpers, methods, hooks, config, and lib files.
+- Keep `components`, `helpers`, `methods`, and `hooks` in separate sibling folders inside a feature or route-local area. Do not mix components, helper functions, methods, and hooks in one folder.
+- Put React rendering in `components/`, pure data transforms and formatting in `helpers/`, event calculations and reusable client-side procedures in `methods/`, and React state/effect/ref orchestration in `hooks/`.
+- Keep page and container files thin. A component file should not become a catch-all for rendering, request orchestration, text helpers, motion helpers, and state hooks.
+
 ## Styling Rules
 
 Write JSX `className` values as double-quoted static strings (`className="..."`) or template literals (``className={`...`}``) when composing classes. A direct passthrough such as `className={cactusClassicalSerif.className}` or `className={className}` is allowed when no classes are being composed.

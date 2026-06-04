@@ -73,6 +73,26 @@ story-studio
 account-settings
 ```
 
+Use camelCase for non-route folders and feature folders:
+
+```txt
+storyRoom/
+storyRoom/helpers/
+storyRoom/methods/
+storyRoom/hooks/
+```
+
+Inside a feature or route-local area, keep responsibilities in separate sibling folders:
+
+```txt
+components/  # PascalCase component files
+helpers/     # camelCase pure data transforms, labels, formatting, copy helpers
+methods/     # camelCase event calculations and reusable client-side procedures
+hooks/       # camelCase React state/effect/ref orchestration
+```
+
+Do not place components, helpers, methods, and hooks together in one catch-all feature folder. Split them before a component file starts handling rendering, request orchestration, text helpers, motion helpers, and state hooks at the same time.
+
 Name route-local helper files as `help<Route><Thing>.js`. Export helper functions with a `help` prefix.
 
 Name route-local handler files as `handle<Route><Action>.js` or `handle<Container><Action>.js`. Export handler functions with a `handle` prefix.
