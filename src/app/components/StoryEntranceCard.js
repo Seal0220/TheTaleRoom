@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
 import { forwardRef } from "react";
 
 export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
@@ -8,6 +9,7 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
     isInactiveEntrance,
     isRaisedEntrance,
     onActivate,
+    onEnter,
     onRelease,
     story,
   },
@@ -65,10 +67,12 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
 
           <button
             type="button"
+            onClick={() => onEnter(story.id, index)}
             className={`relative z-30 cursor-pointer inline-flex h-10 min-w-32 items-center justify-center rounded-md border border-[#f7d995]/42 bg-[#110d14]/76 px-5 text-sm font-semibold text-[#ffe9b7] transition duration-500 ease-in-out will-change-all hover:bg-tale-gold hover:text-[#130b12] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#f7d995]
               ${isInactiveEntrance? "translate-z-0 group-hover:translate-z-0 group-focus-within:translate-z-0": "translate-z-3 group-hover:translate-z-6 group-focus-within:translate-z-6"}`}
           >
             進入故事
+            <ArrowRight className="ml-2 h-4 w-4" />
           </button>
         </div>
       </article>

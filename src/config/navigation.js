@@ -5,11 +5,6 @@ export const navigationItems = [
     icon: "home",
   },
   {
-    label: "Stories",
-    href: "/stories",
-    icon: "stories",
-  },
-  {
     label: "Studio",
     href: "/studio",
     icon: "studio",
