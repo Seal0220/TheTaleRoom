@@ -59,6 +59,7 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
   const [storyError, setStoryError] = useState("");
   const [storyCheckpoints, setStoryCheckpoints] = useState([]);
   const [draftInput, setDraftInput] = useState("");
+  const [pendingUserInput, setPendingUserInput] = useState("");
   const [isTurnLoading, setIsTurnLoading] = useState(false);
   const [activeStageIndex, setActiveStageIndex] = useState(0);
 
@@ -71,6 +72,7 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
       checkpointIndex: index,
       key: `${checkpoint.session_id}-${checkpoint.turn_index ?? index}`,
       storyState: checkpoint,
+      submittedInput: checkpoint.submittedInput ?? "",
     })),
     ...(isTurnLoading
       ? [
@@ -78,6 +80,7 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
           checkpointIndex: storyCheckpoints.length,
           key: "loading-story-stage",
           storyState: null,
+          submittedInput: pendingUserInput,
         },
       ]
       : []),
@@ -109,7 +112,20 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
       return;
     }
 
+    const submittedInput = mode === "continue_story" ? userInput.trim() : "";
+
+    if (submittedInput) {
+      setStoryCheckpoints((currentCheckpoints) =>
+        currentCheckpoints.map((checkpoint, index) =>
+          index === currentCheckpoints.length - 1
+            ? { ...checkpoint, submittedInput }
+            : checkpoint,
+        ),
+      );
+    }
+
     setIsTurnLoading(true);
+    setPendingUserInput(submittedInput);
     setStoryError("");
     setActiveStageIndex(storyCheckpoints.length);
 
@@ -122,7 +138,13 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
         userInput,
       });
 
-      setStoryCheckpoints((currentCheckpoints) => [...currentCheckpoints, payload.state]);
+      setStoryCheckpoints((currentCheckpoints) => [
+        ...currentCheckpoints,
+        {
+          ...payload.state,
+          submittedInput: "",
+        },
+      ]);
       setDraftInput("");
       setActiveStageIndex(storyCheckpoints.length);
     } catch (error) {
@@ -130,6 +152,7 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
       setActiveStageIndex(storyCheckpoints.length > 0 ? storyCheckpoints.length - 1 : 0);
     } finally {
       setIsTurnLoading(false);
+      setPendingUserInput("");
     }
   }
 
@@ -320,11 +343,12 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
                 draftInput={draftInput}
                 isCurrent={stageEntry.checkpointIndex === storyCheckpoints.length - 1}
                 isTurnLoading={isTurnLoading}
-                onBack={onBack}
                 onDraftInputChange={setDraftInput}
                 onSubmit={handleStorySubmit}
+                stageIndex={stageEntry.checkpointIndex}
                 storyError={stageEntry.checkpointIndex === storyCheckpoints.length - 1 ? storyError : ""}
                 storyState={stageEntry.storyState}
+                submittedInput={stageEntry.submittedInput}
               />
             </section>
           ))}
@@ -360,14 +384,24 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
-              <div className="flex justify-between">
-                {storyStages.map((stageEntry, index) => (
+              <div className="relative h-2">
+                {storyStages.map((stageEntry, index) => {
+                  const nodeLeft = stageCount > 1
+                    ? (index / (stageCount - 1)) * 100
+                    : 0;
+
+                  return (
                   <span
-                    className={`h-2 w-2 rounded-full border border-[#f7d995]/50 transition-all duration-500
+                    className={`story-progress-node absolute top-0 h-2 w-2 -translate-x-1/2 rounded-full border border-[#f7d995]/50 transition-[left,background-color,border-color,transform] duration-700 ease-in-out
                       ${index <= activeStageIndex ? "bg-[#f7d995]" : "bg-[#080b14]/70"}`}
                     key={`progress-${stageEntry.key}`}
+                    style={{
+                      left: `${nodeLeft}%`,
+                      transitionDelay: `${index * 70}ms`,
+                    }}
                   />
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -413,7 +447,7 @@ function StoryIntroPanel({ isSwitchHovered, onBack, story, storyError }) {
       </div>
 
       <aside
-        className={`grid gap-5 border-l border-[#f7d995]/22 text-[#f8e8c4]/82 transition duration-600 ease-in-out
+        className={`grid gap-5 border-l border-[#f7d995]/22 text-[#f8e8c4]/82 transition duration-600 ease-in-out pl-6
           ${isSwitchHovered ? "-translate-x-20" : ""}`}
       >
         <div className="grid gap-2">
@@ -508,42 +542,143 @@ function getDepthStageStyle(offset) {
   };
 }
 
+function TypewriterText({
+  className = "",
+  delayStep = 18,
+  initialDelay = 80,
+  style,
+  text,
+}) {
+  const characters = Array.from(text || "");
+
+  return (
+    <p
+      aria-label={text}
+      className={className}
+      style={{
+        ...style,
+        overflowWrap: "anywhere",
+        whiteSpace: "pre-wrap",
+      }}
+    >
+      {characters.map((character, index) => (
+        <span
+          aria-hidden="true"
+          className="story-type-char"
+          key={`${character}-${index}`}
+          style={{ animationDelay: `${initialDelay + index * delayStep}ms` }}
+        >
+          {character}
+        </span>
+      ))}
+    </p>
+  );
+}
+
+function StoryAsideBlock({ children, title }) {
+  return (
+    <div className="grid gap-2">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">
+        {title}
+      </p>
+      <div className="text-sm leading-7">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function getLoadingSceneCopy(stageIndex, submittedInput) {
+  if (stageIndex === 0) {
+    return {
+      detail: "故事門檻 · 微光聚攏 · 第一頁正在醒來",
+      narration:
+        "故事先在門縫裡亮起一點光。說書人把基底文本攤開，讓紙頁裡沉睡的場景慢慢有了呼吸；還不急著抵達答案，只等第一個畫面從夜色深處浮現。",
+      objects: ["未翻開的書頁", "門縫微光", "安靜的呼吸"],
+      title: "故事正在醒來",
+    };
+  }
+
+  const reply = submittedInput?.trim()
+    ? `「${truncateDisplayText(submittedInput.trim(), 42)}」`
+    : "剛才那個選擇";
+
+  return {
+    detail: "上一句回聲 · 場景重組 · 下一頁浮現",
+    narration:
+      `${reply} 還留在場景中央，像一小束沒有熄滅的光。說書人正把它放進角色的影子、遠方的主線與尚未說出口的願望之間，等下一頁從沉默裡慢慢長出來。`,
+    objects: ["回聲", "翻動的書頁", "慢慢聚攏的光"],
+    title: "下一頁正在發光",
+  };
+}
+
+function truncateDisplayText(text, maxLength) {
+  const characters = Array.from(text);
+
+  if (characters.length <= maxLength) {
+    return text;
+  }
+
+  return `${characters.slice(0, maxLength).join("")}...`;
+}
+
 function StoryCheckpointPanel({
   draftInput,
   isCurrent,
   isTurnLoading,
-  onBack,
   onDraftInputChange,
   onSubmit,
+  stageIndex,
   storyError,
   storyState,
+  submittedInput,
 }) {
   const scene = storyState?.scene;
+  const loadingScene = getLoadingSceneCopy(stageIndex, submittedInput);
+  const sceneTitle = scene?.title ?? loadingScene.title;
+  const sceneNarration = scene?.narration ?? loadingScene.narration;
+  const sceneDetail = scene
+    ? `${scene.location} · ${scene.emotional_tone}`
+    : loadingScene.detail;
   const showStoryInput = Boolean(
     isCurrent && storyState?.frontend_actions?.show_input_box && !storyState?.is_finished,
   );
-  const showEndButton = Boolean(isCurrent && storyState?.frontend_actions?.show_continue_button);
-  const symbolicObjects = scene?.symbolic_objects ?? ["基底文本", "故事場景", "選擇點"];
+  const symbolicObjects = scene?.symbolic_objects ?? loadingScene.objects;
+  const userReply = storyState ? submittedInput?.trim() ?? "" : "";
 
   return (
-    <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end">
-      <div className="grid gap-8">
+    <div className="story-status-surface mx-auto grid h-[clamp(34rem,64vh,44rem)] w-full min-w-0 max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-stretch">
+      <div className="grid h-full min-w-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-5">
         <div className="h-[clamp(4rem,10vh,6.5rem)]" />
 
-        <div className="grid max-w-3xl gap-5">
+        <div className="grid min-w-0 max-w-3xl content-start gap-5 overflow-x-hidden overflow-y-auto pr-2">
           <h2
             className="text-5xl font-semibold leading-tight text-[#ffe9b7] drop-shadow-[0_4px_22px_rgba(0,0,0,0.74)] sm:text-6xl lg:text-7xl"
             style={getHoverShiftStyle(660)}
           >
-            {scene?.title ?? "故事正在展開"}
+            {sceneTitle}
           </h2>
 
-          <p
+          {userReply && (
+            <div
+              className="grid max-w-2xl gap-2 border-l border-[#f7d995]/22 bg-[#080b14]/28 py-2 pl-4"
+              style={getHoverShiftStyle(720)}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">
+                你的回覆
+              </p>
+              <p className="text-sm leading-7 text-[#f8e8c4]/74">
+                {userReply}
+              </p>
+            </div>
+          )}
+
+          <TypewriterText
+            key={sceneNarration}
             className="max-w-2xl text-lg leading-9 text-[#f8e8c4]/86"
+            text={sceneNarration}
             style={getHoverShiftStyle(760)}
-          >
-            {scene?.narration ?? "說書人正在讀取基底文本，將第一個場景慢慢鋪開。"}
-          </p>
+          />
 
           {storyState?.choice_point?.prompt && (
             <div
@@ -553,14 +688,11 @@ function StoryCheckpointPanel({
               <p className="text-base leading-8 text-[#ffe9b7]">
                 {storyState.choice_point.prompt}
               </p>
-              {storyState.choice_point.guidance && (
-                <p className="text-sm leading-7 text-[#f8e8c4]/70">
-                  {storyState.choice_point.guidance}
-                </p>
-              )}
             </div>
           )}
+        </div>
 
+        <div className="grid min-h-[11.75rem] max-w-2xl content-end gap-3">
           {showStoryInput && (
             <form
               className="grid max-w-2xl gap-3"
@@ -589,14 +721,6 @@ function StoryCheckpointPanel({
             </form>
           )}
 
-          {showEndButton && (
-            <div style={getHoverShiftStyle(960)}>
-              <Button onClick={onBack}>
-                回到入口
-              </Button>
-            </div>
-          )}
-
           {storyError && (
             <p
               className="max-w-2xl rounded-md border border-[#f4a8b8]/30 bg-[#2b111d]/48 px-4 py-3 text-sm leading-7 text-[#ffd9df]"
@@ -609,22 +733,16 @@ function StoryCheckpointPanel({
       </div>
 
       <aside
-        className="grid gap-5 border-t border-[#f7d995]/22 pt-5 text-[#f8e8c4]/82 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-6"
+        className="grid min-w-0 self-end gap-5 border-t border-[#f7d995]/22 pt-5 text-[#f8e8c4]/82 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-6"
         style={getHoverShiftStyle(1080)}
       >
-        <div className="grid gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">
-            此刻場景
-          </p>
+        <StoryAsideBlock title="此刻場景">
           <p className="text-sm leading-7">
-            {scene ? `${scene.location} · ${scene.emotional_tone}` : "正在建立第一個故事場景"}
+            {sceneDetail}
           </p>
-        </div>
+        </StoryAsideBlock>
 
-        <div className="grid gap-3">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">
-            <span>象徵物</span>
-          </div>
+        <StoryAsideBlock title="象徵物">
           <div className="flex flex-wrap gap-2">
             {symbolicObjects.map((tag) => (
               <span
@@ -635,7 +753,7 @@ function StoryCheckpointPanel({
               </span>
             ))}
           </div>
-        </div>
+        </StoryAsideBlock>
       </aside>
     </div>
   );
