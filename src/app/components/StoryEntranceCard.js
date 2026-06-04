@@ -16,7 +16,11 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
   ref,
 ) {
   return (
-    <div className={`relative perspective-distant ${isRaisedEntrance? "z-30": "z-0"}`}>
+    <div
+      className={`relative perspective-distant ${
+        isRaisedEntrance ? "z-30" : "z-0"
+      }`}
+    >
       <article
         ref={ref}
         onPointerEnter={() => onActivate(index)}

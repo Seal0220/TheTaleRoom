@@ -218,15 +218,15 @@ export function HomeExperience({ initialStoryId = null }) {
 
       <GlobalBlur
         active={hoveredEntrance !== null || isTransitioning}
-        blur={isTransitioning ? 28 : 20}
+        blur={isTransitioning ? 28 : 16}
       />
 
       <section
         className={cx(
-          "relative z-10 flex min-h-screen items-center px-5 py-10 transition-all duration-500 ease-in-out sm:px-8 lg:px-12",
+          "relative flex min-h-screen items-center px-5 py-10 transition-all duration-500 ease-in-out sm:px-8 lg:px-12",
           isHomeSuppressed
             ? "pointer-events-none scale-[1.03] opacity-0 blur-sm"
-            : "pointer-events-auto scale-100 opacity-100 blur-0",
+            : "pointer-events-auto opacity-100",
         )}
       >
         <div className="mx-auto flex w-full max-w-400 flex-col items-start gap-10 lg:flex-row lg:items-center lg:justify-between">
