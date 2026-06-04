@@ -5,7 +5,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { GlobalBlur } from "@/components/effects/GlobalBlur";
 import { storyCatalog, getStoryById, getStoryByRouteName } from "@/config/storyCatalog";
 import { usePointerTilt } from "@/hooks/usePointerTilt";
-import { cx } from "@/lib/classNames";
 import { buildStoryRoute, getStoryNameFromPathname } from "@/lib/storyRoutes";
 import { StoryEntranceCard } from "./StoryEntranceCard";
 import { StoryRoomView } from "./StoryRoomView";
@@ -222,12 +221,8 @@ export function HomeExperience({ initialStoryId = null }) {
       />
 
       <section
-        className={cx(
-          "relative flex min-h-screen items-center px-5 py-10 transition-all duration-500 ease-in-out sm:px-8 lg:px-12",
-          isHomeSuppressed
-            ? "pointer-events-none scale-[1.03] opacity-0 blur-sm"
-            : "pointer-events-auto opacity-100",
-        )}
+        className={`relative flex min-h-screen items-center px-5 py-10 transition-all duration-500 ease-in-out sm:px-8 lg:px-12
+          ${isHomeSuppressed ? "pointer-events-none scale-[1.03] opacity-0 blur-sm" : "pointer-events-auto opacity-100"}`}
       >
         <div className="mx-auto flex w-full max-w-400 flex-col items-start gap-10 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex max-w-xl flex-col items-center justify-center text-left lg:max-w-120">

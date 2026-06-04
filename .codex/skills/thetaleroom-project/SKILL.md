@@ -41,6 +41,14 @@ Use this placement map:
 
 Use PascalCase for component files and camelCase for non-component JavaScript files. Name route-local helpers `help<Route><Thing>.js` and exported helper functions with `help...`. Name handlers `handle<Route><Action>.js` or `handle<Container><Action>.js` and exported handler functions with `handle...`.
 
+## Styling Rules
+
+Write JSX `className` values as double-quoted static strings (`className="..."`) or template literals (``className={`...`}``) when composing classes. A direct passthrough such as `className={cactusClassicalSerif.className}` or `className={className}` is allowed when no classes are being composed.
+
+Do not use `cx`, `clsx`, `classnames`, or equivalent class-name composition helpers. Compose conditional classes inline inside the `className` template literal.
+
+When using `${...}` inside a `className` template literal, put each interpolation on its own line, and keep the full interpolation expression on that single line.
+
 ## TheTaleRoom Domain
 
 Preserve the project identity: TheTaleRoom is an empathy-driven interactive story room for narrative release, gentle containment, and returning the user to the story line. Treat the product as a prototype, not a clinical replacement.

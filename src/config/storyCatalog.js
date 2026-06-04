@@ -77,10 +77,24 @@ export function getStoryById(storyId) {
   return storyCatalog.find((story) => story.id === storyId);
 }
 
+function normalizeStoryRouteName(storyName) {
+  if (!storyName) {
+    return "";
+  }
+
+  try {
+    return decodeURIComponent(storyName).trim();
+  } catch {
+    return storyName.trim();
+  }
+}
+
 export function getStoryByRouteName(storyName) {
+  const normalizedStoryName = normalizeStoryRouteName(storyName);
+
   return storyCatalog.find((story) => {
     const routeName = story.displayTitle ?? story.title;
 
-    return routeName === storyName;
+    return routeName === normalizedStoryName;
   });
 }

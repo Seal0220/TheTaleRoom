@@ -3,8 +3,9 @@ import { HomeExperience } from "../../components/HomeExperience";
 import { getStoryByRouteName } from "@/config/storyCatalog";
 
 export default async function StoryPage({ params }) {
-  const { StoryName } = await params;
-  const story = getStoryByRouteName(StoryName);
+  const routeParams = await params;
+  const storyName = routeParams.StoryName ?? routeParams.storyName;
+  const story = getStoryByRouteName(storyName);
 
   if (!story) {
     notFound();

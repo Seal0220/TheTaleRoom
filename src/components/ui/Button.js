@@ -1,40 +1,23 @@
-import Link from "next/link";
-import { cx } from "@/lib/classNames";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const variantClassNames = {
-  primary:
-    "border-tale-gold bg-tale-gold text-tale-ink hover:bg-[#f4d58f] disabled:border-white/12 disabled:bg-white/12 disabled:text-white/32",
-  secondary:
-    "border-white/14 bg-white/8 text-[#fff4d6] hover:border-tale-gold/60 hover:bg-tale-gold/12 disabled:text-white/32",
-  ghost:
-    "border-white/12 bg-tale-ink/46 text-[#fff4d6] hover:border-tale-gold/60 hover:bg-white/10 disabled:text-white/32",
-};
 
 export function Button({
   children,
-  className,
-  href,
-  variant = "primary",
-  type = "button",
-  ...props
+  className = "",
+  onClick,
+  arrowR = false,
+  arrowL = false,
 }) {
-  const classNames = cx(
-    "tale-focus inline-flex h-11 items-center justify-center gap-2 rounded-lg border px-4 text-sm font-semibold transition disabled:cursor-not-allowed",
-    variantClassNames[variant],
-    className,
-  );
-
-  if (href) {
-    return (
-      <Link href={href} className={classNames} {...props}>
-        {children}
-      </Link>
-    );
-  }
-
   return (
-    <button type={type} className={classNames} {...props}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={`relative z-30 cursor-pointer inline-flex h-10 w-fit min-w-32 items-center justify-center rounded-md border border-[#f7d995]/42 bg-[#110d14]/76 px-5 text-sm font-semibold text-[#ffe9b7] transition duration-500 ease-in-out will-change-all hover:bg-tale-gold hover:text-[#130b12] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#f7d995]
+        ${className}`}
+    >
+      {arrowL && <ArrowLeft className="mr-2 size-4" />}
       {children}
+      {arrowR && <ArrowRight className="ml-2 size-4" />}
     </button>
   );
 }
