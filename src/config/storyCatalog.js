@@ -13,6 +13,7 @@ export const storyCatalog = [
       "A room for exhaustion, invisibility, tenderness, and the first moment of recognition.",
     displayDescription:
       "給疲憊、隱形感、溫柔與第一次被認出的時刻，一間安靜發亮的故事房。",
+    baseStoryDocument: "01-灰姑娘/story.txt",
     emotions: ["neglect", "hope", "recognition"],
     accent: "rose",
     entranceAccent: "from-[#f4a8b8]/34 via-[#cf6f93]/18 to-[#2c1734]/82",
