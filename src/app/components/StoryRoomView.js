@@ -50,10 +50,10 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
       />
 
       <div
-        className={`absolute inset-0 z-10 flex h-full w-full items-center px-5 py-10 transition-all duration-500 ease-in-out sm:px-8 lg:px-12
+        className={`absolute inset-0 z-10 flex h-full w-full items-center px-5 py-24 transition-all duration-500 ease-in-out sm:px-8 md:py-10 md:pl-16 lg:pr-12 lg:pl-18 xl:pl-32
           ${room.isStoryAreaActive ? "pointer-events-none opacity-0 blur-sm" : "pointer-events-auto opacity-100 blur-0"}`}
       >
-        <div className="ml-auto mr-160 w-full max-w-6xl">
+        <div className="mx-auto w-full max-w-6xl md:ml-auto md:mr-[clamp(10rem,30vw,40rem)]">
           <StoryIntroPanel
             isSwitchHovered={room.isSwitchHovered}
             onBack={onBack}

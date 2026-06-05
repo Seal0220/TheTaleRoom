@@ -309,8 +309,8 @@ export function HomeExperience({ initialStoryId = null }) {
         className={`relative flex min-h-screen items-center px-5 py-10 transition-all duration-500 ease-in-out sm:px-8 lg:px-12
           ${isHomeSuppressed ? "pointer-events-none scale-[1.03] opacity-0 blur-sm" : "pointer-events-auto opacity-100"}`}
       >
-        <div className="mx-auto flex w-full max-w-400 flex-col items-start gap-10 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex max-w-xl flex-col items-center justify-center text-left lg:max-w-120">
+        <div className="mx-auto flex w-full max-w-400 flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex max-w-xl flex-col items-center justify-center text-center lg:max-w-120 lg:text-left">
             <div className="mb-5 h-px w-40 bg-linear-to-r from-[#f7d995]/0 via-[#f7d995]/76 to-[#f7d995]/0 lg:w-56" />
             <h1 className="text-5xl font-semibold leading-tight text-[#ffe9b7] drop-shadow-[0_3px_18px_rgba(0,0,0,0.72)] sm:text-6xl lg:text-7xl">
               AI 情緒故事館
@@ -320,7 +320,7 @@ export function HomeExperience({ initialStoryId = null }) {
             </p>
           </div>
 
-          <div className="relative ml-auto grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="relative mx-auto grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:ml-auto xl:grid-cols-4">
             {storyEntrances.map((story, index) => {
               const isInactiveEntrance = hoveredEntrance !== null && hoveredEntrance !== index;
 
