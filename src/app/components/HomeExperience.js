@@ -87,7 +87,7 @@ export function HomeExperience({ initialStoryId = null }) {
       clearTransitionTimers();
 
       const phase = nextStoryId ? "enter" : "exit";
-      setRouteTransition({ phase, storyId: transitionStoryId });
+      setRouteTransition({ active: true, phase, storyId: transitionStoryId });
       setStoryContentVisible(false);
 
       if (Number.isInteger(options.entranceIndex)) {
@@ -97,23 +97,31 @@ export function HomeExperience({ initialStoryId = null }) {
 
       transitionTimersRef.current.push(
         window.setTimeout(() => {
-          selectedStoryIdRef.current = nextStoryId;
-          setSelectedStoryId(nextStoryId);
           setHoveredEntrance(null);
 
           if (nextStoryId) {
-            transitionTimersRef.current.push(
-              window.setTimeout(() => {
-                setStoryContentVisible(true);
-              }, contentFadeInDelay),
-            );
+            selectedStoryIdRef.current = nextStoryId;
+            setSelectedStoryId(nextStoryId);
           }
         }, contentFadeDuration),
       );
 
       transitionTimersRef.current.push(
         window.setTimeout(() => {
-          setRouteTransition(null);
+          if (nextStoryId) {
+            transitionTimersRef.current.push(
+              window.setTimeout(() => {
+                setStoryContentVisible(true);
+              }, contentFadeInDelay),
+            );
+          } else {
+            selectedStoryIdRef.current = null;
+            setSelectedStoryId(null);
+          }
+
+          setRouteTransition((currentTransition) =>
+            currentTransition ? { ...currentTransition, active: false } : null,
+          );
           setRaisedEntrance(null);
         }, routeTransitionDuration),
       );
@@ -192,8 +200,9 @@ export function HomeExperience({ initialStoryId = null }) {
 
   const selectedStory = getStoryById(selectedStoryId);
   const transitionStory = getStoryById(routeTransition?.storyId ?? selectedStoryId);
-  const isTransitioning = Boolean(routeTransition);
-  const isHomeSuppressed = Boolean(selectedStory) || routeTransition?.phase === "enter";
+  const isTransitioning = Boolean(routeTransition?.active);
+  const isHomeSuppressed =
+    Boolean(selectedStory) || Boolean(routeTransition?.active && routeTransition.phase === "enter");
   const isStoryVisible =
     Boolean(selectedStory) && storyContentVisible && routeTransition?.phase !== "exit";
 

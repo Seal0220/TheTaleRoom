@@ -32,6 +32,7 @@ export const storyCatalog = [
       "A room for uncertainty, identity, contradiction, and curious self-recognition.",
     displayDescription:
       "給不確定、自我認同、矛盾與好奇的辨認，一間會改變形狀的夢境房。",
+    baseStoryDocument: "02-愛麗絲夢遊仙境/story.txt",
     emotions: ["confusion", "identity", "curiosity"],
     accent: "violet",
     entranceAccent: "from-[#8d63ff]/34 via-[#542b8f]/22 to-[#16183f]/86",
@@ -50,6 +51,7 @@ export const storyCatalog = [
       "A room for loneliness, memory, attachment, goodbye, and quiet meaning.",
     displayDescription:
       "給孤單、記憶、羈絆、告別與安靜的意義，一間靠近星光的故事房。",
+    baseStoryDocument: "03-小王子/story.txt",
     emotions: ["loneliness", "care", "growth"],
     accent: "gold",
     entranceAccent: "from-[#f4c76b]/38 via-[#a56a31]/18 to-[#111b35]/84",
@@ -68,6 +70,7 @@ export const storyCatalog = [
       "A room for performance, shame, social pressure, honesty, and courage.",
     displayDescription:
       "給表演、羞愧、群體壓力、誠實與勇氣，一間能把真相說出口的故事房。",
+    baseStoryDocument: "04-國王的新衣/story.txt",
     emotions: ["pressure", "truth", "courage"],
     accent: "umber",
     entranceAccent: "from-[#8a6a4f]/32 via-[#3c2c2a]/22 to-[#0c0d12]/90",

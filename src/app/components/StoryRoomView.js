@@ -14,7 +14,7 @@ export function StoryRoomView({ isVisible, onBack, story }) {
 
   return (
     <StoryRoomViewContent
-      key={`${story.id}-${isVisible ? "visible" : "hidden"}`}
+      key={story.id}
       isVisible={isVisible}
       onBack={onBack}
       story={story}
