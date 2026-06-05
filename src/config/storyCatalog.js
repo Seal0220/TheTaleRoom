@@ -14,6 +14,7 @@ export const storyCatalog = [
     displayDescription:
       "給疲憊、隱形感、溫柔與第一次被認出的時刻，一間安靜發亮的故事房。",
     baseStoryDocument: "01-灰姑娘/story.txt",
+    backgroundImage: "/01-灰姑娘/bg-01.png",
     emotions: ["neglect", "hope", "recognition"],
     accent: "rose",
     entranceAccent: "from-[#f4a8b8]/34 via-[#cf6f93]/18 to-[#2c1734]/82",
@@ -33,6 +34,7 @@ export const storyCatalog = [
     displayDescription:
       "給不確定、自我認同、矛盾與好奇的辨認，一間會改變形狀的夢境房。",
     baseStoryDocument: "02-愛麗絲夢遊仙境/story.txt",
+    backgroundImage: "/02-愛麗絲夢遊仙境/bg-02.png",
     emotions: ["confusion", "identity", "curiosity"],
     accent: "violet",
     entranceAccent: "from-[#8d63ff]/34 via-[#542b8f]/22 to-[#16183f]/86",
@@ -52,6 +54,7 @@ export const storyCatalog = [
     displayDescription:
       "給孤單、記憶、羈絆、告別與安靜的意義，一間靠近星光的故事房。",
     baseStoryDocument: "03-小王子/story.txt",
+    backgroundImage: "/03-小王子/bg-03.png",
     emotions: ["loneliness", "care", "growth"],
     accent: "gold",
     entranceAccent: "from-[#f4c76b]/38 via-[#a56a31]/18 to-[#111b35]/84",
@@ -71,6 +74,7 @@ export const storyCatalog = [
     displayDescription:
       "給表演、羞愧、群體壓力、誠實與勇氣，一間能把真相說出口的故事房。",
     baseStoryDocument: "04-國王的新衣/story.txt",
+    backgroundImage: "/04-國王的新衣/bg-04.png",
     emotions: ["pressure", "truth", "courage"],
     accent: "umber",
     entranceAccent: "from-[#8a6a4f]/32 via-[#3c2c2a]/22 to-[#0c0d12]/90",

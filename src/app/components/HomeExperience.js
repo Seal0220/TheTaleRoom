@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GlobalBlur } from "@/components/effects/GlobalBlur";
 import { storyCatalog, getStoryById, getStoryByRouteName } from "@/config/storyCatalog";
 import { usePointerTilt } from "@/hooks/usePointerTilt";
 import { buildStoryRoute, getStoryNameFromPathname } from "@/lib/storyRoutes";
+import { HomeBackground } from "./homeExperience/components/HomeBackground";
 import { StoryEntranceCard } from "./StoryEntranceCard";
 import { StoryRoomView } from "./StoryRoomView";
 import { StoryRouteTransition } from "./StoryRouteTransition";
@@ -24,10 +24,24 @@ const zIndexReleaseDelay = 800;
 const contentFadeDuration = 500;
 const contentFadeInDelay = 40;
 const routeTransitionDuration = 1200;
+const routeTransitionFadeOutDuration = 700;
+const homeBackgroundImage = "/bg.png";
+const backgroundFadeStartDelay = 40;
+const backgroundFadeDuration = 1100;
 
 export function HomeExperience({ initialStoryId = null }) {
   const initialStory = getStoryById(initialStoryId);
+  const initialBackgroundLayers = [
+    {
+      active: true,
+      id: 0,
+      src: initialStory?.backgroundImage ?? homeBackgroundImage,
+    },
+  ];
   const backgroundRef = useRef(null);
+  const backgroundLayerIdRef = useRef(0);
+  const backgroundLayersRef = useRef(initialBackgroundLayers);
+  const backgroundTimersRef = useRef([]);
   const cardRefs = useRef([]);
   const releaseTimerRef = useRef(null);
   const transitionTimersRef = useRef([]);
@@ -37,6 +51,7 @@ export function HomeExperience({ initialStoryId = null }) {
   const [selectedStoryId, setSelectedStoryId] = useState(initialStory?.id ?? null);
   const [storyContentVisible, setStoryContentVisible] = useState(Boolean(initialStory));
   const [routeTransition, setRouteTransition] = useState(null);
+  const [backgroundLayers, setBackgroundLayersState] = useState(initialBackgroundLayers);
 
   usePointerTilt({
     backgroundRef,
@@ -63,6 +78,69 @@ export function HomeExperience({ initialStoryId = null }) {
     transitionTimersRef.current = [];
   }, []);
 
+  const clearBackgroundTimers = useCallback(() => {
+    backgroundTimersRef.current.forEach((timerId) => window.clearTimeout(timerId));
+    backgroundTimersRef.current = [];
+  }, []);
+
+  const setBackgroundLayers = useCallback((nextLayersOrUpdater) => {
+    const nextLayers =
+      typeof nextLayersOrUpdater === "function"
+        ? nextLayersOrUpdater(backgroundLayersRef.current)
+        : nextLayersOrUpdater;
+
+    backgroundLayersRef.current = nextLayers;
+    setBackgroundLayersState(nextLayers);
+  }, []);
+
+  const fadeToBackgroundImage = useCallback(
+    (nextImage) => {
+      const nextSrc = nextImage ?? homeBackgroundImage;
+      const currentTopLayer =
+        backgroundLayersRef.current[backgroundLayersRef.current.length - 1];
+
+      if (currentTopLayer?.src === nextSrc) {
+        return;
+      }
+
+      clearBackgroundTimers();
+
+      const nextLayerId = backgroundLayerIdRef.current + 1;
+      backgroundLayerIdRef.current = nextLayerId;
+      setBackgroundLayers([
+        {
+          ...(currentTopLayer ?? { id: 0, src: homeBackgroundImage }),
+          active: true,
+        },
+        {
+          active: false,
+          id: nextLayerId,
+          src: nextSrc,
+        },
+      ]);
+
+      backgroundTimersRef.current.push(
+        window.setTimeout(() => {
+          setBackgroundLayers((currentLayers) =>
+            currentLayers.map((layer) => ({
+              ...layer,
+              active: layer.id === nextLayerId,
+            })),
+          );
+        }, backgroundFadeStartDelay),
+      );
+
+      backgroundTimersRef.current.push(
+        window.setTimeout(() => {
+          setBackgroundLayers((currentLayers) =>
+            currentLayers.filter((layer) => layer.id === nextLayerId),
+          );
+        }, backgroundFadeDuration + backgroundFadeStartDelay),
+      );
+    },
+    [clearBackgroundTimers, setBackgroundLayers],
+  );
+
   const beginStoryTransition = useCallback(
     (nextStoryId, options = {}) => {
       const nextStory = nextStoryId ? getStoryById(nextStoryId) : null;
@@ -88,6 +166,7 @@ export function HomeExperience({ initialStoryId = null }) {
 
       const phase = nextStoryId ? "enter" : "exit";
       setRouteTransition({ active: true, phase, storyId: transitionStoryId });
+      fadeToBackgroundImage(nextStory?.backgroundImage ?? homeBackgroundImage);
       setStoryContentVisible(false);
 
       if (Number.isInteger(options.entranceIndex)) {
@@ -123,10 +202,16 @@ export function HomeExperience({ initialStoryId = null }) {
             currentTransition ? { ...currentTransition, active: false } : null,
           );
           setRaisedEntrance(null);
+
+          transitionTimersRef.current.push(
+            window.setTimeout(() => {
+              setRouteTransition(null);
+            }, routeTransitionFadeOutDuration),
+          );
         }, routeTransitionDuration),
       );
     },
-    [clearReleaseTimer, clearTransitionTimers],
+    [clearReleaseTimer, clearTransitionTimers, fadeToBackgroundImage],
   );
 
   useEffect(() => {
@@ -149,10 +234,11 @@ export function HomeExperience({ initialStoryId = null }) {
 
   useEffect(() => {
     return () => {
+      clearBackgroundTimers();
       clearReleaseTimer();
       clearTransitionTimers();
     };
-  }, [clearReleaseTimer, clearTransitionTimers]);
+  }, [clearBackgroundTimers, clearReleaseTimer, clearTransitionTimers]);
 
   function writeRoute(pathname) {
     if (typeof window === "undefined") {
@@ -208,20 +294,10 @@ export function HomeExperience({ initialStoryId = null }) {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050713] text-[#f8e8c4]">
-      <div
-        ref={backgroundRef}
-        className="absolute inset-x-[-6vw] inset-y-[-6vh] will-change-all"
-        style={{ transform: "translate3d(0, 0, 0)" }}
-      >
-        <Image
-          src="/bg.png"
-          alt=""
-          fill
-          priority
-          sizes="112vw"
-          className="object-cover blur-xs"
-        />
-      </div>
+      <HomeBackground
+        backgroundRef={backgroundRef}
+        layers={backgroundLayers}
+      />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_45%,rgba(247,190,88,0.08),transparent_24%),linear-gradient(90deg,rgba(3,5,13,0.05),rgba(3,5,13,0.16)_42%,rgba(3,5,13,0.62))]" />
 
       <GlobalBlur
