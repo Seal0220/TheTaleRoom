@@ -17,7 +17,7 @@ export function StoryReturnZone({
       role="button"
       tabIndex={0}
     >
-      <div className="relative z-10 h-fit w-[min(24rem,calc(100%_-_3rem))] select-none text-right md:mt-12">
+      <div className="relative z-10 h-fit w-[clamp(11rem,46vw,18rem)] select-none text-right md:mt-12 md:w-[clamp(11rem,16vw,18rem)]">
         <span className="inline-block whitespace-nowrap text-xs tracking-[0.32em] transition-all duration-[850ms] ease-in-out group-hover/return:tracking-[0.8em] sm:text-sm sm:tracking-[0.5em] sm:group-hover/return:tracking-[1.4em] xl:group-hover/return:tracking-[2em]">
           &lt;返回入口
         </span>
