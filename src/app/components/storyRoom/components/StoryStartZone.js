@@ -20,8 +20,8 @@ export function StoryStartZone({
       role="button"
       tabIndex={0}
     >
-      <div className="relative z-10 h-fit w-fit select-none text-center md:mt-12">
-        <span className="inline-block whitespace-nowrap text-xs tracking-[0.32em] transition-all duration-850 ease-in-out group-hover/switch:tracking-[0.8em] sm:text-sm sm:tracking-[0.5em] sm:group-hover/switch:tracking-[1.4em] xl:group-hover/switch:tracking-[2em]">
+      <div className="relative z-10 h-fit w-[clamp(11rem,46vw,18rem)] select-none text-left md:mt-12 md:w-[clamp(11rem,16vw,18rem)]">
+        <span className="inline-block whitespace-nowrap text-xs tracking-[0.32em] transition-all duration-[850ms] ease-in-out group-hover/switch:tracking-[0.8em] sm:text-sm sm:tracking-[0.5em] sm:group-hover/switch:tracking-[1.4em] xl:group-hover/switch:tracking-[2em]">
           開始故事 &gt;
         </span>
       </div>
