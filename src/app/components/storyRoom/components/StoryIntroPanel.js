@@ -9,7 +9,7 @@ export function StoryIntroPanel({ isSwitchHovered, onBack, story, storyError }) 
     <div className="grid w-full shrink-0 gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end">
       <div
         className={`grid gap-8 transition duration-800 ease-in-out
-          ${isSwitchHovered ? "-translate-x-12" : ""}`}
+          ${isSwitchHovered ? "-translate-x-6 xl:-translate-x-12" : ""}`}
       >
         <Button
           arrowL
@@ -42,7 +42,7 @@ export function StoryIntroPanel({ isSwitchHovered, onBack, story, storyError }) 
 
       <aside
         className={`grid gap-5 border-l border-[#f7d995]/22 pl-6 text-[#f8e8c4]/82 transition duration-600 ease-in-out
-          ${isSwitchHovered ? "-translate-x-20" : ""}`}
+          ${isSwitchHovered ? "-translate-x-10" : ""}`}
       >
         <div className="grid gap-2">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">

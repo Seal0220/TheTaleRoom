@@ -10,15 +10,9 @@ export function StoryStageHeader({
   story,
 }) {
   return (
-    <div
-      className="pointer-events-none z-30 grid"
-      style={{
-        paddingLeft: "var(--stage-gutter)",
-        paddingRight: "var(--stage-gutter)",
-      }}
-    >
+    <div className="pointer-events-none z-30 grid w-fit">
       <div
-        className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-3 text-xs font-medium tracking-[0.16em] text-[#f6d797] sm:text-sm sm:tracking-[0.18em]"
+        className="flex max-w-6xl flex-wrap items-center gap-3 text-xs font-medium tracking-[0.16em] text-[#f6d797] sm:text-sm sm:tracking-[0.18em]"
         style={getHoverShiftStyle(560)}
       >
         {activeStoryStage?.storyState ? (

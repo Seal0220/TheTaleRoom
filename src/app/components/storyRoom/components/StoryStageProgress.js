@@ -10,15 +10,9 @@ export function StoryStageProgress({
   storyStages,
 }) {
   return (
-    <div
-      className="pointer-events-none z-20"
-      style={{
-        paddingLeft: "var(--stage-gutter)",
-        paddingRight: "var(--stage-gutter)",
-      }}
-    >
+    <div className="pointer-events-none z-20">
       <div
-        className="mx-auto grid w-full max-w-6xl gap-3"
+        className="grid w-full max-w-6xl gap-3"
         style={getHoverShiftStyle(1180)}
       >
         <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-[#f6d797]/82">

@@ -36,7 +36,6 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
     >
       <StoryStartZone
         isActive={room.isStoryAreaActive}
-        isHovered={room.isSwitchHovered}
         onKeyDown={room.handleStartKeyDown}
         onPointerEnter={() => room.setIsSwitchHovered(true)}
         onPointerLeave={() => room.setIsSwitchHovered(false)}
@@ -50,10 +49,10 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
       />
 
       <div
-        className={`absolute inset-0 z-10 flex h-full w-full items-center px-5 py-24 transition-all duration-500 ease-in-out sm:px-8 md:py-10 md:pl-16 lg:pr-12 lg:pl-18 xl:pl-32
+        className={`absolute inset-0 z-10 flex h-full w-full items-center px-5 py-24 transition-all duration-500 ease-in-out sm:px-8 md:pr-4 xl:pr-20 md:py-10 md:pl-16 lg:pl-18 xl:pl-32
           ${room.isStoryAreaActive ? "pointer-events-none opacity-0 blur-sm" : "pointer-events-auto opacity-100 blur-0"}`}
       >
-        <div className="mx-auto w-full max-w-6xl md:ml-auto md:mr-[clamp(10rem,30vw,40rem)]">
+        <div className="mx-auto w-full max-w-6xl md:ml-auto md:mr-[clamp(8rem,22vw,30rem)]">
           <StoryIntroPanel
             isSwitchHovered={room.isSwitchHovered}
             onBack={onBack}
