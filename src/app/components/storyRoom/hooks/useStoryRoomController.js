@@ -136,8 +136,6 @@ export function useStoryRoomController({ onBack, story }) {
       return;
     }
 
-    event.preventDefault();
-
     if (wheelLockRef.current) {
       return;
     }
@@ -147,6 +145,14 @@ export function useStoryRoomController({ onBack, story }) {
     if (!wheelDelta) {
       return;
     }
+
+    const scrollElement = getStoryScrollElement(event.target);
+
+    if (scrollElement && canScrollElement(scrollElement, wheelDelta)) {
+      return;
+    }
+
+    event.preventDefault();
 
     wheelLockRef.current = true;
     window.setTimeout(() => {
@@ -198,4 +204,26 @@ function getStoryTurnErrorMessage(error) {
   }
 
   return "說書人剛才在夜色裡多停了一會兒，仍沒能把下一頁帶回來。請再試一次；故事還在燈旁等你。";
+}
+
+function getStoryScrollElement(target) {
+  if (!target || typeof target.closest !== "function") {
+    return null;
+  }
+
+  return target.closest("[data-story-stage-scroll]");
+}
+
+function canScrollElement(element, wheelDelta) {
+  const hasVerticalOverflow = element.scrollHeight > element.clientHeight + 1;
+
+  if (!hasVerticalOverflow) {
+    return false;
+  }
+
+  const canScrollUp = element.scrollTop > 0;
+  const canScrollDown =
+    element.scrollTop + element.clientHeight < element.scrollHeight - 1;
+
+  return (wheelDelta < 0 && canScrollUp) || (wheelDelta > 0 && canScrollDown);
 }

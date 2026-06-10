@@ -31,7 +31,7 @@ export function StoryCheckpointPanel({
   const userReply = storyState ? submittedInput?.trim() ?? "" : "";
 
   return (
-    <div className="story-status-surface grid h-full min-h-0 w-full min-w-0 max-w-6xl grid-rows-[auto_minmax(0,1fr)] gap-6">
+    <div className="story-status-surface grid w-full min-w-0 max-w-6xl gap-6 lg:h-full lg:min-h-0 lg:grid-rows-[auto_minmax(0,1fr)]">
       <h2
         className="min-w-0 max-w-full text-5xl font-semibold leading-tight wrap-break-word text-[#ffe9b7] drop-shadow-[0_4px_22px_rgba(0,0,0,0.74)] sm:text-6xl lg:text-7xl"
         style={getHoverShiftStyle(660)}
@@ -39,15 +39,15 @@ export function StoryCheckpointPanel({
         {sceneTitle}
       </h2>
 
-      <div className="grid h-full min-h-0 min-w-0 gap-6">
+      <div className="grid min-w-0 gap-12 lg:h-full lg:min-h-0">
         <div
-          className="h-full min-h-0 overflow-x-hidden overflow-y-auto"
+          className="overflow-visible lg:h-full lg:min-h-0 lg:overflow-x-hidden lg:overflow-y-auto lg:mr-20"
           onWheel={handleScrollableContentWheel}
         >
-          <div className="grid gap-5 md:pr-6 lg:pr-20">
+          <div className="grid gap-5 md:pr-6">
             <TypewriterText
               key={sceneNarration}
-              className="max-w-full xl:max-w-4xl text-lg leading-9 text-[#f8e8c4]/86"
+              className="text-lg leading-9 text-[#f8e8c4]/86"
               text={sceneNarration}
               style={getHoverShiftStyle(760)}
             />
@@ -101,8 +101,8 @@ export function StoryCheckpointPanel({
           </div>
         </div>
 
-        <div className="grid min-h-fit content-end gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end">
-          <div className="grid min-h-fit max-w-full content-end gap-5">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end">
+          <div className="grid max-w-full gap-5">
             {storyState?.choice_point?.prompt && (
               <div
                 className="grid max-w-full gap-3 border-l border-[#f7d995]/30 pl-5 xl:pr-40"
@@ -116,7 +116,7 @@ export function StoryCheckpointPanel({
 
             {userReply && (
               <div
-                className="min-h-fit resize-none rounded-md border border-[#f7d995]/28 bg-tale-ink/62 px-4 py-3 text-base leading-7 text-[#fff3d0] outline-none transition duration-300 placeholder:text-[#f8e8c4]/34 focus:border-[#f7d995]/72 focus:bg-tale-ink/82"
+                className="resize-none rounded-md border border-[#f7d995]/28 bg-tale-ink/62 px-4 py-3 text-base leading-7 text-[#fff3d0] outline-none transition duration-300 placeholder:text-[#f8e8c4]/34 focus:border-[#f7d995]/72 focus:bg-tale-ink/82"
                 style={getHoverShiftStyle(960)}
               >
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">

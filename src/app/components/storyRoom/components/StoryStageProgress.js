@@ -10,7 +10,7 @@ export function StoryStageProgress({
   storyStages,
 }) {
   return (
-    <div className="pointer-events-none z-20">
+    <div className="pointer-events-none sticky bottom-0 z-40 lg:static lg:mt-0">
       <div
         className="grid w-full max-w-6xl gap-3"
         style={getHoverShiftStyle(1180)}

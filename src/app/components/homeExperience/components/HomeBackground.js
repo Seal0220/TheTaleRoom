@@ -4,7 +4,7 @@ export function HomeBackground({ backgroundRef, layers }) {
   return (
     <div
       ref={backgroundRef}
-      className="absolute inset-x-[-6vw] inset-y-[-6vh] will-change-all"
+      className="pointer-events-none fixed inset-x-[-6vw] inset-y-[-6vh] will-change-all"
       style={{ transform: "translate3d(0, 0, 0)" }}
     >
       {layers.map((layer, index) => (

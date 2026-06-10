@@ -44,7 +44,7 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
 
       <div
         aria-hidden="true"
-        className={`absolute inset-0 bg-[radial-gradient(circle_at_28%_20%,rgba(255,231,170,0.14),transparent_28%),linear-gradient(180deg,rgba(5,7,19,0.24),rgba(5,7,19,0.88))] before:absolute before:inset-x-[-20vw] before:top-[-35vh] before:h-[70vh] before:bg-linear-to-b before:blur-3xl before:content-['']
+        className={`fixed inset-0 bg-[radial-gradient(circle_at_28%_20%,rgba(255,231,170,0.14),transparent_28%),linear-gradient(180deg,rgba(5,7,19,0.24),rgba(5,7,19,0.88))] before:absolute before:inset-x-[-20vw] before:top-[-35vh] before:h-[70vh] before:bg-linear-to-b before:blur-3xl before:content-['']
           ${accentAuraClassNames[story.accent]}`}
       />
 
@@ -76,7 +76,9 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
         draftInput={room.draftInput}
         isActive={room.isStoryAreaActive}
         isTurnLoading={room.isTurnLoading}
+        onBack={onBack}
         onDraftInputChange={room.setDraftInput}
+        onReturnKeyDown={room.handleReturnKeyDown}
         onSubmit={room.handleStorySubmit}
         phaseNames={room.phaseNames}
         progressPercent={room.progressPercent}
