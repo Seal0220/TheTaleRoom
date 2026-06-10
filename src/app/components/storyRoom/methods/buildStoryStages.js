@@ -28,7 +28,7 @@ export function buildStoryStages({
 export function buildStoryStageLabels(storyStages) {
   return {
     phaseNames: storyStages.map(({ storyState }) =>
-      storyState ? phaseLabels[storyState.phase] ?? storyState.phase : "讀取中",
+      storyState ? phaseLabels[storyState.phase] ?? storyState.phase : "說書人仍在翻頁",
     ),
     stageNumbers: storyStages.map((_, index) => `${index + 1}`),
   };

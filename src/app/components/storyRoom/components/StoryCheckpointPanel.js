@@ -32,10 +32,9 @@ export function StoryCheckpointPanel({
 
   return (
     <div className="story-status-surface mx-auto grid h-full min-h-0 w-full min-w-0 max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-stretch">
-      <div className="grid h-full min-h-0 min-w-0 grid-rows-[minmax(0,1fr)_auto] gap-5">
+      <div className="grid h-full min-h-0 min-w-0 grid-rows-[minmax(0,1fr)_auto] gap-3">
         <div
-          className="flex h-full min-h-0 min-w-0 max-w-3xl flex-col gap-5 overflow-x-hidden overflow-y-auto pr-4"
-          onWheel={(event) => event.stopPropagation()}
+          className="grid h-full min-h-0 min-w-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-6"
         >
           <h2
             className="text-5xl font-semibold leading-tight text-[#ffe9b7] drop-shadow-[0_4px_22px_rgba(0,0,0,0.74)] sm:text-6xl lg:text-7xl"
@@ -44,63 +43,72 @@ export function StoryCheckpointPanel({
             {sceneTitle}
           </h2>
 
-          <TypewriterText
-            key={sceneNarration}
-            className="max-w-2xl text-lg leading-9 text-[#f8e8c4]/86"
-            text={sceneNarration}
-            style={getHoverShiftStyle(760)}
-          />
+          <div
+            className="h-full min-h-0 overflow-x-hidden overflow-y-auto"
+            onWheel={handleScrollableContentWheel}
+          >
+            <div className="grid gap-5 pr-4">
+              <TypewriterText
+                key={sceneNarration}
+                className="max-w-3xl text-lg leading-9 text-[#f8e8c4]/86"
+                text={sceneNarration}
+                style={getHoverShiftStyle(760)}
+              />
 
-          {isEnding && closingSummary && (
-            <div
-              className="grid max-w-2xl gap-4 border-l border-[#f7d995]/30 pl-5"
-              style={getHoverShiftStyle(840)}
-            >
-              <StorySummaryBlock title="故事分析">
-                {closingSummary.narrative_analysis}
-              </StorySummaryBlock>
-              {closingSummary.user_emotional_analysis && (
-                <StorySummaryBlock title="情緒文本分析">
-                  {closingSummary.user_emotional_analysis}
-                </StorySummaryBlock>
-              )}
-              <StorySummaryBlock title="情緒弧線">
-                {closingSummary.emotional_arc}
-              </StorySummaryBlock>
-              <StorySummaryBlock title="回到原劇情">
-                {closingSummary.story_return}
-              </StorySummaryBlock>
-              {closingSummary.symbolic_meanings?.length > 0 && (
-                <div className="grid gap-2">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">
-                    象徵物解讀
-                  </p>
-                  <div className="grid gap-2">
-                    {closingSummary.symbolic_meanings.map((item) => (
-                      <div
-                        className="grid gap-1 rounded-md border border-[#f7d995]/18 bg-tale-ink/24 px-3 py-2"
-                        key={`${item.symbol}-${item.meaning}`}
-                      >
-                        <p className="text-sm font-semibold text-[#ffe9b7]">
-                          {item.symbol}
-                        </p>
-                        <p className="text-sm leading-7 text-[#f8e8c4]/74">
-                          {item.meaning}
-                        </p>
+              {isEnding && closingSummary && (
+                <div
+                  className="grid max-w-2xl gap-4 border-l border-[#f7d995]/30 pl-5"
+                  style={getHoverShiftStyle(840)}
+                >
+                  <StorySummaryBlock title="故事分析">
+                    {closingSummary.narrative_analysis}
+                  </StorySummaryBlock>
+                  {closingSummary.user_emotional_analysis && (
+                    <StorySummaryBlock title="情緒文本分析">
+                      {closingSummary.user_emotional_analysis}
+                    </StorySummaryBlock>
+                  )}
+                  <StorySummaryBlock title="情緒弧線">
+                    {closingSummary.emotional_arc}
+                  </StorySummaryBlock>
+                  <StorySummaryBlock title="回到原劇情">
+                    {closingSummary.story_return}
+                  </StorySummaryBlock>
+                  {closingSummary.symbolic_meanings?.length > 0 && (
+                    <div className="grid gap-2">
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">
+                        象徵物解讀
+                      </p>
+                      <div className="grid gap-2">
+                        {closingSummary.symbolic_meanings.map((item) => (
+                          <div
+                            className="grid gap-1 rounded-md border border-[#f7d995]/18 bg-tale-ink/24 px-3 py-2"
+                            key={`${item.symbol}-${item.meaning}`}
+                          >
+                            <p className="text-sm font-semibold text-[#ffe9b7]">
+                              {item.symbol}
+                            </p>
+                            <p className="text-sm leading-7 text-[#f8e8c4]/74">
+                              {item.meaning}
+                            </p>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  )}
+                  <StorySummaryBlock title="留給你的話">
+                    {closingSummary.gentle_takeaway}
+                  </StorySummaryBlock>
                 </div>
               )}
-              <StorySummaryBlock title="留給你的話">
-                {closingSummary.gentle_takeaway}
-              </StorySummaryBlock>
             </div>
-          )}
+          </div>
+        </div>
 
+        <div className="grid min-h-fit max-w-3xl content-end gap-5">
           {storyState?.choice_point?.prompt && (
             <div
-              className="mt-auto grid max-w-2xl gap-3 border-l border-[#f7d995]/30 pl-5"
+              className="grid max-w-3xl gap-3 border-l border-[#f7d995]/30 pl-5"
               style={getHoverShiftStyle(860)}
             >
               <p className="text-base leading-8 text-[#ffe9b7]">
@@ -108,12 +116,10 @@ export function StoryCheckpointPanel({
               </p>
             </div>
           )}
-        </div>
 
-        <div className="grid min-h-47 max-w-2xl content-end gap-3">
           {userReply && (
             <div
-              className="grid max-w-2xl gap-2 border-l border-[#f7d995]/22 bg-tale-ink/28 py-2 pl-4"
+              className="min-h-fit resize-none rounded-md border border-[#f7d995]/28 bg-tale-ink/62 px-4 py-3 text-base leading-7 text-[#fff3d0] outline-none transition duration-300 placeholder:text-[#f8e8c4]/34 focus:border-[#f7d995]/72 focus:bg-tale-ink/82"
               style={getHoverShiftStyle(960)}
             >
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f6d797]">
@@ -127,7 +133,7 @@ export function StoryCheckpointPanel({
 
           {showStoryInput && !userReply && (
             <form
-              className="grid max-w-2xl gap-3"
+              className="grid max-w-3xl grid-cols-[minmax(0,1fr)_auto] items-end gap-3"
               onSubmit={onSubmit}
               style={getHoverShiftStyle(960)}
             >
@@ -155,7 +161,7 @@ export function StoryCheckpointPanel({
 
           {storyError && (
             <p
-              className="max-w-2xl rounded-md border border-[#f4a8b8]/30 bg-[#2b111d]/48 px-4 py-3 text-sm leading-7 text-[#ffd9df]"
+              className="max-w-3xl rounded-md border border-[#f4a8b8]/30 bg-[#2b111d]/48 px-4 py-3 text-sm leading-7 text-[#ffd9df]"
               style={getHoverShiftStyle(960)}
             >
               {storyError}
@@ -189,4 +195,21 @@ export function StoryCheckpointPanel({
       </aside>
     </div>
   );
+}
+
+function handleScrollableContentWheel(event) {
+  const element = event.currentTarget;
+  const hasVerticalOverflow = element.scrollHeight > element.clientHeight + 1;
+
+  if (!hasVerticalOverflow) {
+    return;
+  }
+
+  const canScrollUp = element.scrollTop > 0;
+  const canScrollDown =
+    element.scrollTop + element.clientHeight < element.scrollHeight - 1;
+
+  if ((event.deltaY < 0 && canScrollUp) || (event.deltaY > 0 && canScrollDown)) {
+    event.stopPropagation();
+  }
 }

@@ -8,6 +8,11 @@ const stageGutter = "clamp(1rem, 3vw, 3rem)";
 const stageOffset = "clamp(5.5rem, 28vw, 25rem)";
 const stageWidth =
   "calc(100vw - var(--stage-offset) - var(--stage-gutter) - var(--stage-gutter))";
+const storyTurnRequestOptions = {
+  retries: 2,
+  retryDelayMs: 1200,
+  timeoutMs: 95000,
+};
 
 export function useStoryRoomController({ onBack, story }) {
   const wheelLockRef = useRef(false);
@@ -67,14 +72,18 @@ export function useStoryRoomController({ onBack, story }) {
     setActiveStageIndex(storyCheckpoints.length);
 
     try {
-      const payload = await postJson("/api/story/turn", {
-        interactionHistory: buildInteractionHistory(storyCheckpoints),
-        mode,
-        previousState: mode === "continue_story" ? latestStoryState : null,
-        sessionId: latestStoryState?.session_id ?? "",
-        storyId: story.id,
-        userInput,
-      });
+      const payload = await postJson(
+        "/api/story/turn",
+        {
+          interactionHistory: buildInteractionHistory(storyCheckpoints),
+          mode,
+          previousState: mode === "continue_story" ? latestStoryState : null,
+          sessionId: latestStoryState?.session_id ?? "",
+          storyId: story.id,
+          userInput,
+        },
+        storyTurnRequestOptions,
+      );
 
       setStoryCheckpoints((currentCheckpoints) => [
         ...currentCheckpoints,
@@ -86,7 +95,7 @@ export function useStoryRoomController({ onBack, story }) {
       setDraftInput("");
       setActiveStageIndex(storyCheckpoints.length);
     } catch (error) {
-      setStoryError(error.message ?? "故事暫時無法開始。");
+      setStoryError(getStoryTurnErrorMessage(error));
       setActiveStageIndex(storyCheckpoints.length > 0 ? storyCheckpoints.length - 1 : 0);
     } finally {
       setIsTurnLoading(false);
@@ -181,4 +190,12 @@ export function useStoryRoomController({ onBack, story }) {
     storyError,
     storyStages,
   };
+}
+
+function getStoryTurnErrorMessage(error) {
+  if (error?.status && error.status < 500) {
+    return error.message ?? "故事暫時無法開始。";
+  }
+
+  return "說書人剛才在夜色裡多停了一會兒，仍沒能把下一頁帶回來。請再試一次；故事還在燈旁等你。";
 }

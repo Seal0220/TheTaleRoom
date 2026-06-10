@@ -189,36 +189,53 @@ export async function generateInteractiveStoryTurn({
     };
   }
 
-  const completion = await requestStoryCompletion({
-    maxTokens: fallback.phase === "ending" ? 3000 : 2200,
-    messages: buildInteractiveStoryMessages({
-      baseStoryDocument,
-      fallback,
-      mode,
-      previousState,
-      story,
-      userInput,
-    }),
-    responseFormat: { type: "json_object" },
-    temperature: 0.68,
-  });
+  try {
+    const completion = await requestStoryCompletion({
+      maxTokens: fallback.phase === "ending" ? 3000 : 2200,
+      messages: buildInteractiveStoryMessages({
+        baseStoryDocument,
+        fallback,
+        mode,
+        previousState,
+        story,
+        userInput,
+      }),
+      responseFormat: { type: "json_object" },
+      temperature: 0.68,
+    });
 
-  const parsedState = parseStoryJsonText(completion.text);
+    const parsedState = parseStoryJsonText(completion.text);
 
-  if (containsConflictingStoryIdentity(parsedState, story)) {
+    if (containsConflictingStoryIdentity(parsedState, story)) {
+      return {
+        model: completion.model,
+        provider: "local-identity-guard",
+        state: createLocalInteractiveStoryState(fallback),
+        usage: completion.usage ?? null,
+      };
+    }
+
     return {
       model: completion.model,
-      provider: "local-identity-guard",
-      state: createLocalInteractiveStoryState(fallback),
+      provider: completion.provider,
+      state: normalizeInteractiveStoryState(parsedState, fallback),
       usage: completion.usage ?? null,
     };
+  } catch (error) {
+    return createRecoveredStoryTurn(error, fallback);
   }
+}
+
+function createRecoveredStoryTurn(error, fallback) {
+  console.warn("[story-turn] Provider failed; using local fallback.", {
+    message: error?.message ?? "Unknown story provider error.",
+  });
 
   return {
-    model: completion.model,
-    provider: completion.provider,
-    state: normalizeInteractiveStoryState(parsedState, fallback),
-    usage: completion.usage ?? null,
+    model: "local-provider-recovery",
+    provider: "local-provider-recovery",
+    state: createLocalInteractiveStoryState(fallback),
+    usage: null,
   };
 }
 
@@ -231,6 +248,9 @@ function buildInteractiveStoryMessages({
   userInput,
 }) {
   const selectedTitle = story.displayTitle ?? story.title;
+  const promptPreviousState = createPromptPreviousState(previousState);
+  const promptEmotionalThread =
+    truncatePromptText(fallback.userEmotionalThread, 1800) || "尚未有使用者情緒文本";
   const otherStoryNames = storyCatalog
     .filter((catalogStory) => catalogStory.id !== story.id)
     .flatMap((catalogStory) => [
@@ -259,7 +279,7 @@ function buildInteractiveStoryMessages({
         `server_controlled_phase: ${fallback.phase}`,
         `server_main_arc_position: ${fallback.mainArcPosition}`,
         `server_base_story_anchor: ${fallback.baseStoryAnchor}`,
-        `server_user_emotional_thread: ${fallback.userEmotionalThread || "尚未有使用者情緒文本"}`,
+        `server_user_emotional_thread: ${promptEmotionalThread}`,
         `server_next_scene_goal: ${fallback.nextSceneGoal}`,
         `server_return_strategy: ${fallback.returnStrategy}`,
         `forbidden_other_story_names: ${otherStoryNames || "none"}`,
@@ -267,8 +287,8 @@ function buildInteractiveStoryMessages({
         "基底故事文檔：",
         baseStoryDocument,
         "",
-        "上一輪 JSON 狀態：",
-        previousState ? JSON.stringify(previousState, null, 2) : "null",
+        "上一輪精簡狀態：",
+        promptPreviousState ? JSON.stringify(promptPreviousState, null, 2) : "null",
         "",
         "使用者輸入：",
         userInput ?? "",
@@ -303,6 +323,81 @@ function buildInteractiveStoryMessages({
       ].join("\n"),
     },
   ];
+}
+
+function createPromptPreviousState(previousState) {
+  if (!previousState) {
+    return null;
+  }
+
+  return {
+    session_id: asString(previousState.session_id, ""),
+    story_id: asString(previousState.story_id, ""),
+    turn_index: asNumber(previousState.turn_index, 0),
+    phase: asString(previousState.phase, ""),
+    is_finished: asBoolean(previousState.is_finished, false),
+    scene: {
+      title: truncatePromptText(previousState.scene?.title, 80),
+      narration: truncatePromptText(previousState.scene?.narration, 700),
+      emotional_tone: truncatePromptText(previousState.scene?.emotional_tone, 120),
+      location: truncatePromptText(previousState.scene?.location, 80),
+      characters: asStringArray(previousState.scene?.characters, []).slice(0, 6),
+      symbolic_objects: asStringArray(previousState.scene?.symbolic_objects, []).slice(0, 8),
+    },
+    choice_point: {
+      prompt: truncatePromptText(previousState.choice_point?.prompt, 240),
+      guidance: truncatePromptText(previousState.choice_point?.guidance, 160),
+    },
+    user_input_interpretation: {
+      literal_action: truncatePromptText(
+        previousState.user_input_interpretation?.literal_action,
+        180,
+      ),
+      emotional_meaning: asStringArray(
+        previousState.user_input_interpretation?.emotional_meaning,
+        [],
+      ).slice(0, 8),
+      narrative_function: truncatePromptText(
+        previousState.user_input_interpretation?.narrative_function,
+        240,
+      ),
+      risk_level: asString(previousState.user_input_interpretation?.risk_level, "none"),
+    },
+    story_control: {
+      main_arc_position: truncatePromptText(previousState.story_control?.main_arc_position, 220),
+      deviation_level: clampDeviation(previousState.story_control?.deviation_level),
+      base_story_anchor: truncatePromptText(previousState.story_control?.base_story_anchor, 220),
+      return_strategy: truncatePromptText(previousState.story_control?.return_strategy, 260),
+      next_scene_goal: truncatePromptText(previousState.story_control?.next_scene_goal, 220),
+    },
+    multimodal_prompts: {
+      image_prompt: truncatePromptText(previousState.multimodal_prompts?.image_prompt, 420),
+      voice_prompt: truncatePromptText(previousState.multimodal_prompts?.voice_prompt, 240),
+      music_prompt: truncatePromptText(previousState.multimodal_prompts?.music_prompt, 260),
+    },
+    frontend_actions: {
+      suggested_animation: truncatePromptText(
+        previousState.frontend_actions?.suggested_animation,
+        160,
+      ),
+      background_mood: truncatePromptText(previousState.frontend_actions?.background_mood, 140),
+    },
+    closing_summary: previousState.is_finished
+      ? {
+        narrative_analysis: truncatePromptText(
+          previousState.closing_summary?.narrative_analysis,
+          280,
+        ),
+        user_emotional_analysis: truncatePromptText(
+          previousState.closing_summary?.user_emotional_analysis,
+          320,
+        ),
+        emotional_arc: truncatePromptText(previousState.closing_summary?.emotional_arc, 220),
+        story_return: truncatePromptText(previousState.closing_summary?.story_return, 220),
+        gentle_takeaway: truncatePromptText(previousState.closing_summary?.gentle_takeaway, 160),
+      }
+      : null,
+  };
 }
 
 function parseStoryJsonText(text) {
@@ -877,6 +972,17 @@ function summarizeUserInput(userInput, quietInput) {
 
   const trimmed = userInput.trim().replace(/\s+/g, " ");
   return trimmed.length > 80 ? `${trimmed.slice(0, 80)}...` : trimmed;
+}
+
+function truncatePromptText(value, maxLength) {
+  const text = asString(value, "").trim();
+  const characters = Array.from(text);
+
+  if (characters.length <= maxLength) {
+    return text;
+  }
+
+  return `${characters.slice(0, maxLength).join("")}...`;
 }
 
 function asString(value, fallback) {
