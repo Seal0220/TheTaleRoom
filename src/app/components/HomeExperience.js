@@ -311,7 +311,7 @@ export function HomeExperience({ initialStoryId = null }) {
 
       <section
         aria-hidden={isHomeSuppressed}
-        className={`absolute inset-0 z-10 flex min-h-screen items-center overflow-y-auto px-5 py-10 transition-all duration-500 ease-in-out sm:px-8 lg:px-12
+        className={`absolute inset-0 flex min-h-screen items-center overflow-y-auto px-5 py-10 transition-all duration-500 ease-in-out sm:px-8 lg:px-12
           ${isHomeSuppressed ? "pointer-events-none scale-[1.03] opacity-0 blur-sm" : "pointer-events-auto opacity-100"}`}
       >
         <div className="mx-auto flex w-full max-w-400 flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-between">
