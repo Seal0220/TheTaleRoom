@@ -31,7 +31,7 @@ export function StoryCheckpointPanel({
   const userReply = storyState ? submittedInput?.trim() ?? "" : "";
 
   return (
-    <div className="story-status-surface grid w-full min-w-0 max-w-6xl gap-6 lg:h-full lg:min-h-0 lg:grid-rows-[auto_minmax(0,1fr)]">
+    <div className="story-status-surface grid w-full min-w-0 max-w-6xl gap-6 lg:min-h-full lg:grid-rows-[auto_minmax(min-content,1fr)]">
       <h2
         className="min-w-0 max-w-full text-5xl font-semibold leading-tight wrap-break-word text-[#ffe9b7] drop-shadow-[0_4px_22px_rgba(0,0,0,0.74)] sm:text-6xl lg:text-7xl"
         style={getHoverShiftStyle(660)}
@@ -39,9 +39,9 @@ export function StoryCheckpointPanel({
         {sceneTitle}
       </h2>
 
-      <div className="grid min-w-0 gap-12 lg:h-full lg:min-h-0">
+      <div className="grid min-w-0 gap-12 lg:grid-rows-[minmax(10rem,1fr)_auto]">
         <div
-          className="overflow-visible lg:h-full lg:min-h-0 lg:overflow-x-hidden lg:overflow-y-auto lg:mr-20"
+          className="min-h-40 overflow-visible lg:overflow-x-hidden lg:overflow-y-auto lg:mr-20"
           onWheel={handleScrollableContentWheel}
         >
           <div className="grid gap-5 md:pr-6">
@@ -167,7 +167,7 @@ export function StoryCheckpointPanel({
           </div>
 
           <aside
-            className="grid min-w-0 self-end gap-5 border-t border-[#f7d995]/22 pt-5 text-[#f8e8c4]/82 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-6 pr-10"
+            className="grid min-w-0 self-end gap-5 border-t border-[#f7d995]/22 pt-5 text-[#f8e8c4]/82 md:grid-cols-2 md:gap-8 lg:grid-cols-1 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-6 lg:pr-10"
             style={getHoverShiftStyle(1080)}
           >
             <StoryAsideBlock title="此刻場景">

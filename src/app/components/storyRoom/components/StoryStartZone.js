@@ -8,10 +8,10 @@ export function StoryStartZone({
   return (
     <div
       aria-label="開始故事"
-      className={`group/switch absolute right-0 bottom-0 z-30 grid h-24 w-full cursor-pointer items-center justify-center overflow-hidden bg-linear-to-t from-[#f4c76b]/34 to-transparent px-6 transition-all duration-700 ease-in-out 
-        md:top-0 md:right-0 md:bottom-auto md:h-full md:w-[clamp(8rem,22vw,30rem)] md:bg-linear-to-l
-        before:pointer-events-none before:absolute before:inset-0 before:z-0 before:bg-linear-to-t before:from-[#f4c76b]/40 before:via-[#f4c76b]/12 before:to-transparent before:opacity-0 before:transition-opacity before:duration-700 before:ease-in-out before:content-[''] hover:before:opacity-100 md:before:bg-linear-to-l
-        ${isActive ? "pointer-events-none translate-y-10 opacity-0 md:translate-x-28 md:translate-y-0" : "translate-x-0 translate-y-0 opacity-100"}`}
+      className={`group/switch absolute right-0 bottom-0 z-30 hidden h-24 w-full cursor-pointer items-center justify-center overflow-hidden bg-linear-to-t from-[#f4c76b]/34 to-transparent px-6 transition-all duration-700 ease-in-out 
+        lg:top-0 lg:right-0 lg:bottom-auto lg:grid lg:h-full lg:w-[clamp(8rem,22vw,30rem)] lg:bg-linear-to-l
+        before:pointer-events-none before:absolute before:inset-0 before:z-0 before:bg-linear-to-t before:from-[#f4c76b]/40 before:via-[#f4c76b]/12 before:to-transparent before:opacity-0 before:transition-opacity before:duration-700 before:ease-in-out before:content-[''] hover:before:opacity-100 lg:before:bg-linear-to-l
+        ${isActive ? "pointer-events-none translate-y-10 opacity-0 lg:translate-x-28 lg:translate-y-0" : "translate-x-0 translate-y-0 opacity-100"}`}
       onClick={onStart}
       onKeyDown={onKeyDown}
       onPointerEnter={onPointerEnter}

@@ -10,9 +10,9 @@ export function StoryStageProgress({
   storyStages,
 }) {
   return (
-    <div className="pointer-events-none sticky bottom-0 z-40 lg:static lg:mt-0">
+    <div className="pointer-events-none sticky bottom-4 z-40 mt-auto before:pointer-events-none before:absolute before:bottom-[-1rem] before:left-1/2 before:z-0 before:h-24 before:w-screen before:-translate-x-1/2 before:bg-linear-to-t before:from-[#151515]/78 before:via-[#151515]/42 before:to-transparent before:content-[''] after:pointer-events-none after:absolute after:bottom-[-1rem] after:left-1/2 after:z-0 after:h-28 after:w-screen after:-translate-x-1/2 after:backdrop-blur-md after:[mask-image:linear-gradient(to_top,black_0%,black_48%,transparent_100%)] after:content-[''] lg:static lg:mt-0 lg:before:hidden lg:after:hidden">
       <div
-        className="grid w-full max-w-6xl gap-3"
+        className="relative z-10 grid w-full max-w-6xl gap-3"
         style={getHoverShiftStyle(1180)}
       >
         <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-[#f6d797]/82">
