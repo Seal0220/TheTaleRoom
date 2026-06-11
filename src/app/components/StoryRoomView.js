@@ -29,7 +29,7 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
     <section
       aria-hidden={!isVisible}
       aria-live="polite"
-      className={`absolute inset-0 z-20 min-h-screen overflow-hidden transition-all duration-500 ease-in-out
+      className={`absolute inset-0 z-20 min-h-full overflow-hidden transition-all duration-500 ease-in-out
         ${isVisible ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-8 opacity-0"}`}
       onTouchEnd={room.handleStageTouchEnd}
       onTouchStart={room.handleStageTouchStart}
@@ -46,7 +46,7 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
 
       <div
         aria-hidden="true"
-        className={`fixed inset-0 
+        className={`pointer-events-none fixed inset-0 
           bg-[radial-gradient(circle_at_28%_20%,rgba(255,231,170,0.14),transparent_28%),linear-gradient(180deg,rgba(5,7,19,0.24),rgba(5,7,19,0.88))] 
           before:absolute  before:top-[-35vh] before:h-[82vh] before:bg-linear-to-b before:blur-3xl before:content-['']
           ${accentAuraClassNames[story.accent]}`}
@@ -56,7 +56,7 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
         className={`absolute inset-0 z-10 overflow-y-auto transition-all duration-500 ease-in-out 
           ${room.isStoryAreaActive ? "pointer-events-none opacity-0 blur-sm" : "pointer-events-auto opacity-100 blur-0"}`}
       >
-        <div className="relative flex min-h-screen min-w-0 flex-col justify-start px-8 py-8 md:justify-center md:px-20 lg:h-full lg:min-h-0 lg:px-0 lg:py-0">
+        <div className="relative flex min-h-full min-w-0 flex-col justify-start px-8 py-8 md:justify-center md:px-20 lg:h-full lg:min-h-0 lg:px-0 lg:py-0">
           <div className="mx-auto w-full max-w-3xl xl:max-w-6xl">
             <StoryIntroPanel
               isSwitchHovered={room.isSwitchHovered}

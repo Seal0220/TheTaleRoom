@@ -98,8 +98,8 @@ export function StoryStagePagerTest() {
         "--stage-width": stageWidth,
       }}
     >
-      <div className="absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center opacity-70 blur-xs" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_22%,rgba(246,215,151,0.16),transparent_26%),linear-gradient(90deg,rgba(4,6,16,0.76),rgba(4,6,16,0.36)_52%,rgba(55,39,17,0.68))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[url('/bg.png')] bg-cover bg-center opacity-70 blur-xs" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_22%,rgba(246,215,151,0.16),transparent_26%),linear-gradient(90deg,rgba(4,6,16,0.76),rgba(4,6,16,0.36)_52%,rgba(55,39,17,0.68))]" />
 
       <div
         aria-label="返回入口"

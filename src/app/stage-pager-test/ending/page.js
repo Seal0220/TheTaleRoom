@@ -87,8 +87,8 @@ export default function EndingStagePagerTestPage() {
 
   return (
     <main className="relative min-h-screen overflow-y-auto bg-[#050713] text-[#f8e8c4]">
-      <div className="fixed inset-0 bg-[url('/bg.png')] bg-cover bg-center opacity-70 blur-xs" />
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_28%_20%,rgba(255,231,170,0.14),transparent_28%),linear-gradient(180deg,rgba(5,7,19,0.24),rgba(5,7,19,0.88))]" />
+      <div className="pointer-events-none fixed inset-0 bg-[url('/bg.png')] bg-cover bg-center opacity-70 blur-xs" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_28%_20%,rgba(255,231,170,0.14),transparent_28%),linear-gradient(180deg,rgba(5,7,19,0.24),rgba(5,7,19,0.88))]" />
 
       <section className="relative z-10 flex min-h-screen min-w-0 flex-col justify-center px-8 py-8 md:px-20 lg:pl-60 lg:pr-20">
         <div className="mx-auto grid min-h-[calc(100svh-4rem)] w-full max-w-6xl grid-rows-[auto_minmax(min-content,1fr)_auto] gap-8 lg:min-h-[clamp(38rem,calc(100svh-4rem),52rem)] lg:gap-10">

@@ -20,11 +20,15 @@
 }
 
 html {
+  width: 100%;
   min-height: 100%;
   background: var(--color-tale-ink);
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
+  width: 100%;
   min-height: 100vh;
   margin: 0;
   background:
@@ -32,6 +36,8 @@ body {
     #080b14;
   color: #f7edd4;
   font-family: inherit;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
 }
 
 a {
@@ -44,6 +50,15 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+a,
+button,
+input,
+textarea,
+select,
+[role="button"] {
+  touch-action: manipulation;
 }
 
 ::selection {

@@ -297,12 +297,12 @@ export function HomeExperience({ initialStoryId = null }) {
   const isStoryVisible = Boolean(selectedStory) && storyContentVisible && routeTransition?.phase !== "exit";
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050713] text-[#f8e8c4]">
+    <main className="fixed inset-0 h-dvh overflow-hidden bg-[#050713] text-[#f8e8c4]">
       <HomeBackground
         backgroundRef={backgroundRef}
         layers={backgroundLayers}
       />
-      <div className="fixed max-h-screen inset-0 bg-[radial-gradient(circle_at_18%_45%,rgba(247,190,88,0.08),transparent_24%),linear-gradient(90deg,rgba(3,5,13,0.05),rgba(3,5,13,0.16)_42%,rgba(3,5,13,0.62))]" />
+      <div className="pointer-events-none fixed max-h-screen inset-0 bg-[radial-gradient(circle_at_18%_45%,rgba(247,190,88,0.08),transparent_24%),linear-gradient(90deg,rgba(3,5,13,0.05),rgba(3,5,13,0.16)_42%,rgba(3,5,13,0.62))]" />
 
       <GlobalBlur
         active={hoveredEntrance !== null || isTransitioning}
@@ -311,7 +311,7 @@ export function HomeExperience({ initialStoryId = null }) {
 
       <section
         aria-hidden={isHomeSuppressed}
-        className={`absolute inset-0 flex min-h-screen items-start overflow-y-auto px-5 py-10 transition-all duration-500 ease-in-out sm:px-8 md:items-center lg:px-12
+        className={`absolute inset-0 flex min-h-full items-start overflow-y-auto overscroll-contain px-5 py-10 transition-all duration-500 ease-in-out sm:px-8 md:items-center lg:px-12
           ${isHomeSuppressed ? "pointer-events-none scale-[1.03] opacity-0 blur-sm" : "pointer-events-auto opacity-100"}`}
       >
         <div className="mx-auto flex w-full max-w-400 flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-between">

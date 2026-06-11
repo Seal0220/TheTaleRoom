@@ -25,21 +25,9 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
     onEnter(story.id, index);
   }
 
-  function handleEnterStoryTouchEnd(event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    touchEnterLockRef.current = true;
-    onEnter(story.id, index);
-
-    window.setTimeout(() => {
-      touchEnterLockRef.current = false;
-    }, 480);
-  }
-
   return (
     <div
-      className={`relative perspective-distant
+      className={`relative lg:perspective-distant
         ${isRaisedEntrance ? "z-30" : "z-0"}`}
     >
       <article
@@ -52,7 +40,7 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
             onRelease();
           }
         }}
-        className="group relative flex min-h-90 rounded-[28px_28px_10px_10px] border border-tale-gold/34 bg-[#0c0d18]/36 text-left shadow-[0_24px_80px_rgba(0,0,0,0.46)] transition-[border-color,box-shadow] duration-500 ease-in-out backface-hidden translate-0 rotate-0 origin-center transform-3d hover:border-[#f7d995]/70 hover:shadow-[0_28px_90px_rgba(232,196,125,0.18)] xl:min-h-140"
+        className="group relative flex min-h-90 rounded-[28px_28px_10px_10px] border border-tale-gold/34 bg-[#0c0d18]/36 text-left shadow-[0_24px_80px_rgba(0,0,0,0.46)] transition-[border-color,box-shadow] duration-500 ease-in-out hover:border-[#f7d995]/70 hover:shadow-[0_28px_90px_rgba(232,196,125,0.18)] lg:backface-hidden lg:translate-0 lg:rotate-0 lg:origin-center lg:transform-3d xl:min-h-140"
       >
         <div
           aria-hidden="true"
@@ -76,25 +64,25 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
           <span className="absolute left-1/2 top-5 h-20 w-px -translate-x-1/2 bg-linear-to-b from-[#f7d995]/60 to-transparent" />
         </div>
 
-        <div className="relative z-10 flex w-full flex-col items-center justify-between px-5 py-8 text-center perspective-[900px] transform-3d">
+        <div className="relative z-10 flex w-full flex-col items-center justify-between px-5 py-8 text-center lg:perspective-[900px] lg:transform-3d">
           <span
             className={`grid h-12 w-12 place-items-center rounded-full border border-[#f7d995]/42 bg-[#100d16]/64 text-lg font-semibold text-[#f8e8c4] shadow-[0_0_26px_rgba(232,196,125,0.16)] transition-all duration-300 ease-in-out will-change-all
-              ${isInactiveEntrance ? "translate-z-0 group-hover:translate-z-0 group-focus-within:translate-z-0" : "translate-z-3 group-hover:translate-z-8 group-focus-within:translate-z-8"}`}
+              ${isInactiveEntrance ? "lg:translate-z-0 lg:group-hover:translate-z-0 lg:group-focus-within:translate-z-0" : "lg:translate-z-3 lg:group-hover:translate-z-8 lg:group-focus-within:translate-z-8"}`}
           >
             {index + 1}
           </span>
 
-          <div className="grid gap-4 transition-all duration-500 ease-in-out transform-3d will-change-all">
+          <div className="grid gap-4 transition-all duration-500 ease-in-out will-change-all lg:transform-3d">
             <p
               className={`text-2xl font-semibold leading-tight text-[#ffe9b7] drop-shadow-[0_2px_12px_rgba(0,0,0,0.72)] transition-all duration-800 ease-in-out will-change-all
-                ${isInactiveEntrance ? "translate-z-0 group-hover:translate-z-0 group-focus-within:translate-z-0" : "translate-z-5 group-hover:translate-z-12 group-focus-within:translate-z-12"}`}
+                ${isInactiveEntrance ? "lg:translate-z-0 lg:group-hover:translate-z-0 lg:group-focus-within:translate-z-0" : "lg:translate-z-5 lg:group-hover:translate-z-12 lg:group-focus-within:translate-z-12"}`}
             >
               {story.title}
             </p>
 
             <div
               className={`grid gap-4 transition-transform duration-1200 ease-in-out
-                ${isInactiveEntrance ? "translate-z-0 group-hover:translate-z-0 group-focus-within:translate-z-0" : "translate-z-2 group-hover:translate-z-6 group-focus-within:translate-z-6"}`}
+                ${isInactiveEntrance ? "lg:translate-z-0 lg:group-hover:translate-z-0 lg:group-focus-within:translate-z-0" : "lg:translate-z-2 lg:group-hover:translate-z-6 lg:group-focus-within:translate-z-6"}`}
             >
               {story.headImage && (
                 <span className="mx-auto grid size-32 place-items-center overflow-hidden rounded-full drop-shadow-[0_0_26px_rgba(232,196,125,0.16)]">
@@ -118,12 +106,12 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
             </div>
           </div>
 
-          <div className="pt-10" onTouchEnd={handleEnterStoryTouchEnd}>
+          <div className="pt-10">
             <Button
               onClick={handleEnterStory}
               arrowR
               className={`
-                ${isInactiveEntrance ? "translate-z-0 group-hover:translate-z-0 group-focus-within:translate-z-0" : "translate-z-3 group-hover:translate-z-6 group-focus-within:translate-z-6"}`}
+                ${isInactiveEntrance ? "lg:translate-z-0 lg:group-hover:translate-z-0 lg:group-focus-within:translate-z-0" : "lg:translate-z-3 lg:group-hover:translate-z-6 lg:group-focus-within:translate-z-6"}`}
             >
               進入故事
             </Button>

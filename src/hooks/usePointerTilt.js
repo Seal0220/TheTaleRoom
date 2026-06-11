@@ -47,6 +47,22 @@ export function usePointerTilt({
   }, [itemCount]);
 
   useEffect(() => {
+    const canHoverPrecisely = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    if (!canHoverPrecisely) {
+      if (backgroundRef?.current) {
+        backgroundRef.current.style.transform = "";
+      }
+
+      itemRefs?.current?.forEach((item) => {
+        if (item) {
+          item.style.transform = "";
+        }
+      });
+
+      return;
+    }
+
     function resetPointer() {
       pointerRef.current = idlePointer;
     }

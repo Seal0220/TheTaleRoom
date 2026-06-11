@@ -16,6 +16,11 @@ export const metadata = {
     "An empathy-driven interactive story room for narrative reflection.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
