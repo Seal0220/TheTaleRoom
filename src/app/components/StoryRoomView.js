@@ -31,6 +31,8 @@ function StoryRoomViewContent({ isVisible, onBack, story }) {
       aria-live="polite"
       className={`absolute inset-0 z-20 min-h-screen overflow-hidden transition-all duration-500 ease-in-out
         ${isVisible ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-8 opacity-0"}`}
+      onTouchEnd={room.handleStageTouchEnd}
+      onTouchStart={room.handleStageTouchStart}
       onWheel={room.handleStageWheel}
       style={room.stageCssVars}
     >

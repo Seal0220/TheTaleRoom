@@ -39,9 +39,10 @@ export function StoryCheckpointPanel({
         {sceneTitle}
       </h2>
 
-      <div className="grid min-w-0 gap-12 lg:grid-rows-[minmax(10rem,1fr)_auto]">
+      <div className="grid min-w-0 gap-12 lg:grid-rows-[auto_auto]">
         <div
-          className="min-h-40 overflow-visible lg:overflow-x-hidden lg:overflow-y-auto lg:mr-20"
+          className="min-h-40 overflow-visible lg:h-82 lg:max-h-82 lg:min-h-82 lg:overflow-x-hidden lg:overflow-y-auto lg:mr-20"
+          data-story-stage-scroll
           onWheel={handleScrollableContentWheel}
         >
           <div className="grid gap-5 md:pr-6">

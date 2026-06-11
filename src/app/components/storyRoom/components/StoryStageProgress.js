@@ -43,13 +43,13 @@ export function StoryStageProgress({
             </span>
           </span>
         </div>
-        <div className="h-px w-full bg-[#f7d995]/20">
-          <div
-            className="h-px bg-[#f7d995] transition-[width] duration-700 ease-in-out"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-        <div className="relative h-2">
+        <div className="relative h-2 w-full">
+          <div className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-[#f7d995]/20">
+            <div
+              className="h-px bg-[#f7d995] transition-[width] duration-700 ease-in-out"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
           {storyStages.map((stageEntry, index) => {
             const nodeLeft = stageCount > 1
               ? (index / (stageCount - 1)) * 100
@@ -57,7 +57,7 @@ export function StoryStageProgress({
 
             return (
               <span
-                className={`story-progress-node absolute top-0 ml-1 h-2 w-2 -translate-x-1/2 rounded-full border border-[#f7d995]/50 transition-[left,background-color,border-color,transform] duration-700 ease-in-out
+                className={`story-progress-node absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#f7d995]/50 transition-[left,background-color,border-color,transform] duration-700 ease-in-out
                   ${index <= activeStageIndex ? "bg-[#f7d995]" : "bg-tale-ink/70"}`}
                 key={`progress-${stageEntry.key}`}
                 style={{

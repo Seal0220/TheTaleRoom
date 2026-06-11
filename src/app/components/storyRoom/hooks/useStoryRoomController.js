@@ -16,6 +16,7 @@ const storyTurnRequestOptions = {
 
 export function useStoryRoomController({ onBack, story }) {
   const wheelLockRef = useRef(false);
+  const touchStartRef = useRef(null);
   const [isReturnHovered, setIsReturnHovered] = useState(false);
   const [isSwitchHovered, setIsSwitchHovered] = useState(false);
   const [storyError, setStoryError] = useState("");
@@ -164,12 +165,65 @@ export function useStoryRoomController({ onBack, story }) {
     );
   }
 
+  function handleStageTouchStart(event) {
+    if (!isStoryAreaActive || stageCount === 0 || event.touches.length !== 1) {
+      touchStartRef.current = null;
+      return;
+    }
+
+    const touch = event.touches[0];
+
+    touchStartRef.current = {
+      scrollElement: getStoryScrollElement(event.target),
+      x: touch.clientX,
+      y: touch.clientY,
+    };
+  }
+
+  function handleStageTouchEnd(event) {
+    if (!isStoryAreaActive || stageCount === 0 || wheelLockRef.current) {
+      touchStartRef.current = null;
+      return;
+    }
+
+    const touchStart = touchStartRef.current;
+    touchStartRef.current = null;
+
+    if (!touchStart || event.changedTouches.length !== 1) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    const deltaX = touchStart.x - touch.clientX;
+    const deltaY = touchStart.y - touch.clientY;
+    const touchDelta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
+
+    if (Math.abs(touchDelta) < 42) {
+      return;
+    }
+
+    if (touchStart.scrollElement && canScrollElement(touchStart.scrollElement, touchDelta)) {
+      return;
+    }
+
+    wheelLockRef.current = true;
+    window.setTimeout(() => {
+      wheelLockRef.current = false;
+    }, 760);
+
+    setActiveStageIndex((currentIndex) =>
+      getNextStageIndex({ currentIndex, stageCount, wheelDelta: touchDelta }),
+    );
+  }
+
   return {
     activeStageIndex,
     activeStoryStage,
     draftInput,
     handleReturnKeyDown,
     handleStageWheel,
+    handleStageTouchEnd,
+    handleStageTouchStart,
     handleStartKeyDown,
     handleStartStory,
     handleStorySubmit,
