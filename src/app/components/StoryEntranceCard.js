@@ -30,16 +30,23 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
             onRelease();
           }
         }}
-        className="group relative flex min-h-90 rounded-[28px_28px_10px_10px] border border-tale-gold/34 bg-[#0c0d18]/36 text-left shadow-[0_24px_80px_rgba(0,0,0,0.46)] transition-[border-color,box-shadow] duration-500 ease-in-out backface-hidden translate-0 rotate-0 origin-center transform-3d hover:border-[#f7d995]/70 hover:shadow-[0_28px_90px_rgba(232,196,125,0.18)]"
+        className="group relative flex min-h-90 rounded-[28px_28px_10px_10px] border border-tale-gold/34 bg-[#0c0d18]/36 text-left shadow-[0_24px_80px_rgba(0,0,0,0.46)] transition-[border-color,box-shadow] duration-500 ease-in-out backface-hidden translate-0 rotate-0 origin-center transform-3d hover:border-[#f7d995]/70 hover:shadow-[0_28px_90px_rgba(232,196,125,0.18)] xl:min-h-140"
       >
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px_28px_10px_10px] bg-[#0c0d18]/72"
         >
           <span
-            className={`absolute inset-0 bg-linear-to-b
+            className="absolute inset-0 bg-cover bg-center opacity-[0.82] transition duration-700 ease-in-out group-hover:scale-105 group-hover:opacity-100 group-focus-within:scale-105 group-focus-within:opacity-100"
+            style={{
+              backgroundImage: `url(${story.entryImage ?? story.backgroundImage})`,
+            }}
+          />
+          <span
+            className={`absolute inset-0 bg-linear-to-b mix-blend-multiply
               ${story.accent}`}
           />
+          <span className="absolute inset-0 bg-linear-to-b from-[#090811]/16 via-[#090811]/50 to-[#070713]/86" />
           <span className="absolute -inset-12 bg-[radial-gradient(circle_at_50%_22%,rgba(255,231,170,0.34),transparent_36%),radial-gradient(circle_at_50%_84%,rgba(232,196,125,0.18),transparent_44%)] opacity-0 blur-2xl transition-opacity duration-500 ease-in-out group-hover:opacity-100 group-focus-within:opacity-100" />
           <span className="absolute inset-0 rounded-[28px_28px_10px_10px] opacity-0 shadow-[inset_0_0_34px_rgba(255,232,182,0.28),0_0_42px_rgba(232,196,125,0.26)] transition-opacity duration-500 ease-in-out group-hover:opacity-100 group-focus-within:opacity-100" />
           <span className="absolute inset-x-5 top-5 h-px bg-linear-to-r from-transparent via-[#f7d995]/76 to-transparent" />
@@ -67,6 +74,18 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
               className={`grid gap-4 transition-transform duration-1200 ease-in-out
                 ${isInactiveEntrance ? "translate-z-0 group-hover:translate-z-0 group-focus-within:translate-z-0" : "translate-z-2 group-hover:translate-z-6 group-focus-within:translate-z-6"}`}
             >
+              {story.headImage && (
+                <span className="mx-auto grid size-32 place-items-center overflow-hidden rounded-full border border-[#f7d995]/34 bg-[#100d16]/54 shadow-[0_0_26px_rgba(232,196,125,0.16)]">
+                  <span
+                    aria-label={story.narrator}
+                    className="h-full w-full bg-cover bg-center"
+                    role="img"
+                    style={{
+                      backgroundImage: `url(${story.headImage})`,
+                    }}
+                  />
+                </span>
+              )}
               <p className="text-sm font-medium tracking-[0.16em] text-[#f6d797]">
                 {story.narrator}
               </p>
