@@ -75,7 +75,7 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
                 ${isInactiveEntrance ? "translate-z-0 group-hover:translate-z-0 group-focus-within:translate-z-0" : "translate-z-2 group-hover:translate-z-6 group-focus-within:translate-z-6"}`}
             >
               {story.headImage && (
-                <span className="mx-auto grid size-32 place-items-center overflow-hidden rounded-full border border-[#f7d995]/34 bg-[#100d16]/54 shadow-[0_0_26px_rgba(232,196,125,0.16)]">
+                <span className="mx-auto grid size-32 place-items-center overflow-hidden drop-shadow-[0_0_26px_rgba(232,196,125,0.16)]">
                   <span
                     aria-label={story.narrator}
                     className="h-full w-full bg-cover bg-center"

@@ -59,6 +59,7 @@ export function StoryStageOverlay({
                   onDraftInputChange={onDraftInputChange}
                   onSubmit={onSubmit}
                   stageIndex={stageEntry.checkpointIndex}
+                  story={story}
                   storyError={
                     stageEntry.checkpointIndex === storyCheckpoints.length - 1
                       ? storyError

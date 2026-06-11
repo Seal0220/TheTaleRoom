@@ -1,4 +1,5 @@
 import { ArrowLeft, BookOpen } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { emotionLabels } from "../helpers/storyRoomLabels";
 
@@ -39,9 +40,22 @@ export function StoryIntroPanel({
             {story.displayTitle ?? story.title}
           </h2>
 
-          <p className="max-w-2xl text-lg leading-9 text-[#f8e8c4]/86">
-            {story.displayPrompt ?? story.prompt}
-          </p>
+          <div className="flex flex-row items-center gap-3">
+            {story.headImage && (
+              <div className="relative size-12 sm:size-16 min-w-12 overflow-hidden drop-shadow-[0_0_30px_rgba(232,196,125,0.18)]">
+                <Image
+                  alt={story.displayNarrator ?? story.narrator}
+                  className="object-cover"
+                  fill
+                  sizes="(min-width: 640px) 7rem, 6rem"
+                  src={story.headImage}
+                />
+              </div>
+            )}
+            <p className="max-w-2xl text-lg leading-9 text-[#f8e8c4]/86">
+              {story.displayPrompt ?? story.prompt}
+            </p>
+          </div>
 
           {storyError && (
             <p className="max-w-2xl rounded-md border border-[#f4a8b8]/30 bg-[#2b111d]/48 px-4 py-3 text-sm leading-7 text-[#ffd9df]">

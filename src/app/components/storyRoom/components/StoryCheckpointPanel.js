@@ -1,4 +1,5 @@
 import { LoaderCircle, Send } from "lucide-react";
+import Image from "next/image";
 import { getLoadingSceneCopy } from "../helpers/storyRoomCopy";
 import { getHoverShiftStyle } from "../helpers/storyRoomMotion";
 import { StoryAsideBlock, StorySummaryBlock } from "./StoryBlocks";
@@ -11,6 +12,7 @@ export function StoryCheckpointPanel({
   onDraftInputChange,
   onSubmit,
   stageIndex,
+  story,
   storyError,
   storyState,
   submittedInput,
@@ -106,10 +108,21 @@ export function StoryCheckpointPanel({
           <div className="grid max-w-full gap-5">
             {storyState?.choice_point?.prompt && (
               <div
-                className="grid max-w-full gap-3 border-l border-[#f7d995]/30 pl-5 xl:pr-40"
+                className="flex max-w-full flex-row items-center gap-3 xl:pr-40"
                 style={getHoverShiftStyle(860)}
               >
-                <p className="text-base leading-8 text-[#ffe9b7]">
+                {story?.headImage && (
+                  <div className="relative mt-1 size-12 min-w-12 overflow-hidden drop-shadow-[0_0_30px_rgba(232,196,125,0.18)] sm:size-16 sm:min-w-16">
+                    <Image
+                      alt={story.displayNarrator ?? story.narrator}
+                      className="object-cover"
+                      fill
+                      sizes="(min-width: 640px) 4rem, 3rem"
+                      src={story.headImage}
+                    />
+                  </div>
+                )}
+                <p className="max-w-2xl border-l border-[#f7d995]/30 pl-3 text-base leading-8 text-[#ffe9b7]">
                   {storyState.choice_point.prompt}
                 </p>
               </div>
@@ -131,12 +144,12 @@ export function StoryCheckpointPanel({
 
             {showStoryInput && !userReply && (
               <form
-                className="grid max-w-full grid-cols-[minmax(0,1fr)_auto] items-end gap-3"
+                className="flex flex-col sm:flex-row max-w-full items-center sm:items-end gap-3"
                 onSubmit={onSubmit}
                 style={getHoverShiftStyle(960)}
               >
                 <textarea
-                  className="min-h-28 resize-none rounded-md border border-[#f7d995]/28 bg-tale-ink/62 px-4 py-3 text-base leading-7 text-[#fff3d0] outline-none transition duration-300 placeholder:text-[#f8e8c4]/34 focus:border-[#f7d995]/72 focus:bg-tale-ink/82"
+                  className="flex-1 w-full min-h-28 resize-none rounded-md border border-[#f7d995]/28 bg-tale-ink/62 px-4 py-3 text-base leading-7 text-[#fff3d0] outline-none transition duration-300 placeholder:text-[#f8e8c4]/34 focus:border-[#f7d995]/72 focus:bg-tale-ink/82"
                   disabled={isTurnLoading}
                   onChange={(event) => onDraftInputChange(event.target.value)}
                   placeholder="讓她做什麼、想什麼，或說出一句沒說出口的話..."
