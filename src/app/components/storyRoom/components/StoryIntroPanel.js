@@ -23,6 +23,8 @@ export function StoryIntroPanel({
             aria-label="返回入口"
             className="relative z-10 inline-flex h-9 w-fit items-center gap-2 rounded-md border border-[#f7d995]/34 bg-[#100b14]/62 px-3 -mx-1 mb-2 text-xs font-semibold tracking-[0.16em] text-[#ffe9b7] transition duration-300 hover:bg-tale-gold hover:text-[#130b12] md:mb-0"
             onClick={onBack}
+            onPointerDown={stopControlEventPropagation}
+            onTouchStart={stopControlEventPropagation}
             type="button"
           >
             <ArrowLeft className="size-4" />
@@ -42,7 +44,7 @@ export function StoryIntroPanel({
 
           <div className="flex flex-row items-center gap-3">
             {story.headImage && (
-              <div className="relative size-12 sm:size-16 min-w-12 overflow-hidden drop-shadow-[0_0_30px_rgba(232,196,125,0.18)]">
+              <div className="relative size-12 sm:size-16 min-w-12 overflow-hidden rounded-full drop-shadow-[0_0_30px_rgba(232,196,125,0.18)]">
                 <Image
                   alt={story.displayNarrator ?? story.narrator}
                   className="object-cover"
@@ -105,4 +107,8 @@ export function StoryIntroPanel({
       </div>
     </div>
   );
+}
+
+function stopControlEventPropagation(event) {
+  event.stopPropagation();
 }

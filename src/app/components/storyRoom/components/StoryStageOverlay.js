@@ -29,7 +29,7 @@ export function StoryStageOverlay({
         ${isActive ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
       data-story-stage-scroll
     >
-      <div className="relative flex min-h-screen min-w-0 flex-col justify-center px-8 py-8 md:px-20 lg:pl-60 lg:pr-20">
+      <div className="relative flex min-h-screen min-w-0 flex-col justify-start px-8 py-8 md:justify-center md:px-20 lg:pl-60 lg:pr-20">
         <div className="mx-auto grid min-h-[calc(100svh-4rem)] w-full max-w-6xl grid-rows-[auto_minmax(min-content,1fr)_auto] gap-8 lg:min-h-[clamp(38rem,calc(100svh-4rem),52rem)] lg:gap-10">
           {stageCount > 0 && (
             <StoryStageHeader

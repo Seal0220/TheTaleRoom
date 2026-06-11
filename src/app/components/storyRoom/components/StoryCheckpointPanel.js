@@ -158,6 +158,8 @@ export function StoryCheckpointPanel({
                 <button
                   className="inline-flex h-11 w-fit cursor-pointer items-center justify-center rounded-md border border-[#f7d995]/42 bg-[#110d14]/76 px-5 text-sm font-semibold text-[#ffe9b7] transition duration-500 ease-in-out hover:bg-tale-gold hover:text-[#130b12] disabled:cursor-wait disabled:opacity-70"
                   disabled={isTurnLoading}
+                  onPointerDown={stopControlEventPropagation}
+                  onTouchStart={stopControlEventPropagation}
                   type="submit"
                 >
                   {isTurnLoading ? (
@@ -224,4 +226,8 @@ function handleScrollableContentWheel(event) {
   if ((event.deltaY < 0 && canScrollUp) || (event.deltaY > 0 && canScrollDown)) {
     event.stopPropagation();
   }
+}
+
+function stopControlEventPropagation(event) {
+  event.stopPropagation();
 }

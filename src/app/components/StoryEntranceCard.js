@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { forwardRef } from "react";
+import { forwardRef, useRef } from "react";
 
 export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
   {
@@ -15,6 +15,28 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
   },
   ref,
 ) {
+  const touchEnterLockRef = useRef(false);
+
+  function handleEnterStory() {
+    if (touchEnterLockRef.current) {
+      return;
+    }
+
+    onEnter(story.id, index);
+  }
+
+  function handleEnterStoryTouchEnd(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    touchEnterLockRef.current = true;
+    onEnter(story.id, index);
+
+    window.setTimeout(() => {
+      touchEnterLockRef.current = false;
+    }, 480);
+  }
+
   return (
     <div
       className={`relative perspective-distant
@@ -75,7 +97,7 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
                 ${isInactiveEntrance ? "translate-z-0 group-hover:translate-z-0 group-focus-within:translate-z-0" : "translate-z-2 group-hover:translate-z-6 group-focus-within:translate-z-6"}`}
             >
               {story.headImage && (
-                <span className="mx-auto grid size-32 place-items-center overflow-hidden drop-shadow-[0_0_26px_rgba(232,196,125,0.16)]">
+                <span className="mx-auto grid size-32 place-items-center overflow-hidden rounded-full drop-shadow-[0_0_26px_rgba(232,196,125,0.16)]">
                   <span
                     aria-label={story.narrator}
                     className="h-full w-full bg-cover bg-center"
@@ -96,14 +118,16 @@ export const StoryEntranceCard = forwardRef(function StoryEntranceCard(
             </div>
           </div>
 
-          <Button
-            onClick={() => onEnter(story.id, index)}
-            arrowR
-            className={`
-              ${isInactiveEntrance ? "translate-z-0 group-hover:translate-z-0 group-focus-within:translate-z-0" : "translate-z-3 group-hover:translate-z-6 group-focus-within:translate-z-6"}`}
-          >
-            進入故事
-          </Button>
+          <div className="pt-10" onTouchEnd={handleEnterStoryTouchEnd}>
+            <Button
+              onClick={handleEnterStory}
+              arrowR
+              className={`
+                ${isInactiveEntrance ? "translate-z-0 group-hover:translate-z-0 group-focus-within:translate-z-0" : "translate-z-3 group-hover:translate-z-6 group-focus-within:translate-z-6"}`}
+            >
+              進入故事
+            </Button>
+          </div>
         </div>
       </article>
     </div>
